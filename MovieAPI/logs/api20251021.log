@@ -1,0 +1,306 @@
+2025-10-21 22:29:13.877 +02:00 [ERR] The model for context 'AppDbContext' has pending changes. Add a new migration before updating the database. See https://aka.ms/efcore-docs-pending-changes.
+2025-10-21 22:29:13.993 +02:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2025-10-21 22:29:14.003 +02:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT GET_LOCK('__MovieAPI_EFMigrationsLock', 259200)
+2025-10-21 22:29:14.034 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS `__EFMigrationsHistory` (
+    `MigrationId` varchar(150) CHARACTER SET utf8mb4 NOT NULL,
+    `ProductVersion` varchar(32) CHARACTER SET utf8mb4 NOT NULL,
+    CONSTRAINT `PK___EFMigrationsHistory` PRIMARY KEY (`MigrationId`)
+) CHARACTER SET=utf8mb4;
+2025-10-21 22:29:14.047 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='MovieAPI' AND TABLE_NAME='__EFMigrationsHistory';
+2025-10-21 22:29:14.050 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2025-10-21 22:29:14.054 +02:00 [INF] Applying migration '20251020164630_InitialCreate'.
+2025-10-21 22:29:14.061 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER DATABASE CHARACTER SET utf8mb4;
+2025-10-21 22:29:14.064 +02:00 [ERR] Failed executing DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `Movies` (
+    `Id` int NOT NULL AUTO_INCREMENT,
+    `Title` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
+    `Description` varchar(1000) CHARACTER SET utf8mb4 NULL,
+    `Year` int NOT NULL,
+    `Director` varchar(255) CHARACTER SET utf8mb4 NULL,
+    `Rating` double NULL,
+    `RuntimeMinutes` double NULL,
+    `Genre` varchar(500) CHARACTER SET utf8mb4 NULL,
+    `PosterUrl` varchar(500) CHARACTER SET utf8mb4 NULL,
+    `CreatedAt` datetime(6) NOT NULL,
+    `UpdatedAt` datetime(6) NULL,
+    CONSTRAINT `PK_Movies` PRIMARY KEY (`Id`)
+) CHARACTER SET=utf8mb4;
+2025-10-21 22:31:31.317 +02:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2025-10-21 22:31:31.342 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT GET_LOCK('__MovieAPI_EFMigrationsLock', 259200)
+2025-10-21 22:31:31.383 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS `__EFMigrationsHistory` (
+    `MigrationId` varchar(150) CHARACTER SET utf8mb4 NOT NULL,
+    `ProductVersion` varchar(32) CHARACTER SET utf8mb4 NOT NULL,
+    CONSTRAINT `PK___EFMigrationsHistory` PRIMARY KEY (`MigrationId`)
+) CHARACTER SET=utf8mb4;
+2025-10-21 22:31:31.395 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='MovieAPI' AND TABLE_NAME='__EFMigrationsHistory';
+2025-10-21 22:31:31.398 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2025-10-21 22:31:31.404 +02:00 [INF] Applying migration '20251020164630_InitialCreate'.
+2025-10-21 22:31:31.411 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER DATABASE CHARACTER SET utf8mb4;
+2025-10-21 22:31:31.413 +02:00 [ERR] Failed executing DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `Movies` (
+    `Id` int NOT NULL AUTO_INCREMENT,
+    `Title` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
+    `Description` varchar(1000) CHARACTER SET utf8mb4 NULL,
+    `Year` int NOT NULL,
+    `Director` varchar(255) CHARACTER SET utf8mb4 NULL,
+    `Rating` double NULL,
+    `RuntimeMinutes` double NULL,
+    `Genre` varchar(500) CHARACTER SET utf8mb4 NULL,
+    `PosterUrl` varchar(500) CHARACTER SET utf8mb4 NULL,
+    `CreatedAt` datetime(6) NOT NULL,
+    `UpdatedAt` datetime(6) NULL,
+    CONSTRAINT `PK_Movies` PRIMARY KEY (`Id`)
+) CHARACTER SET=utf8mb4;
+2025-10-21 22:36:32.715 +02:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2025-10-21 22:36:32.740 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT GET_LOCK('__MovieAPI_EFMigrationsLock', 259200)
+2025-10-21 22:36:32.782 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS `__EFMigrationsHistory` (
+    `MigrationId` varchar(150) CHARACTER SET utf8mb4 NOT NULL,
+    `ProductVersion` varchar(32) CHARACTER SET utf8mb4 NOT NULL,
+    CONSTRAINT `PK___EFMigrationsHistory` PRIMARY KEY (`MigrationId`)
+) CHARACTER SET=utf8mb4;
+2025-10-21 22:36:32.794 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='MovieAPI' AND TABLE_NAME='__EFMigrationsHistory';
+2025-10-21 22:36:32.797 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2025-10-21 22:36:32.803 +02:00 [INF] Applying migration '20251020164630_InitialCreate'.
+2025-10-21 22:36:32.809 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER DATABASE CHARACTER SET utf8mb4;
+2025-10-21 22:36:32.812 +02:00 [ERR] Failed executing DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `Movies` (
+    `Id` int NOT NULL AUTO_INCREMENT,
+    `Title` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
+    `Description` varchar(1000) CHARACTER SET utf8mb4 NULL,
+    `Year` int NOT NULL,
+    `Director` varchar(255) CHARACTER SET utf8mb4 NULL,
+    `Rating` double NULL,
+    `RuntimeMinutes` double NULL,
+    `Genre` varchar(500) CHARACTER SET utf8mb4 NULL,
+    `PosterUrl` varchar(500) CHARACTER SET utf8mb4 NULL,
+    `CreatedAt` datetime(6) NOT NULL,
+    `UpdatedAt` datetime(6) NULL,
+    CONSTRAINT `PK_Movies` PRIMARY KEY (`Id`)
+) CHARACTER SET=utf8mb4;
+2025-10-21 22:37:44.964 +02:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2025-10-21 22:37:44.990 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT GET_LOCK('__MovieAPI_EFMigrationsLock', 259200)
+2025-10-21 22:37:45.031 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS `__EFMigrationsHistory` (
+    `MigrationId` varchar(150) CHARACTER SET utf8mb4 NOT NULL,
+    `ProductVersion` varchar(32) CHARACTER SET utf8mb4 NOT NULL,
+    CONSTRAINT `PK___EFMigrationsHistory` PRIMARY KEY (`MigrationId`)
+) CHARACTER SET=utf8mb4;
+2025-10-21 22:37:45.044 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='MovieAPI' AND TABLE_NAME='__EFMigrationsHistory';
+2025-10-21 22:37:45.046 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2025-10-21 22:37:45.052 +02:00 [INF] Applying migration '20251021203118_UpdateMovieAndSeatingPlan'.
+2025-10-21 22:37:45.106 +02:00 [INF] Executed DbCommand (46ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `SeatingPlans` (
+    `Id` int NOT NULL AUTO_INCREMENT,
+    `PlanName` varchar(50) CHARACTER SET utf8mb4 NOT NULL,
+    `LayoutJson` longtext CHARACTER SET utf8mb4 NOT NULL,
+    `Description` varchar(500) CHARACTER SET utf8mb4 NOT NULL,
+    `MovieId` int NOT NULL,
+    CONSTRAINT `PK_SeatingPlans` PRIMARY KEY (`Id`),
+    CONSTRAINT `FK_SeatingPlans_Movies_MovieId` FOREIGN KEY (`MovieId`) REFERENCES `Movies` (`Id`) ON DELETE CASCADE
+) CHARACTER SET=utf8mb4;
+2025-10-21 22:37:45.121 +02:00 [INF] Executed DbCommand (14ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX `IX_SeatingPlans_MovieId` ON `SeatingPlans` (`MovieId`);
+2025-10-21 22:37:45.123 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`)
+VALUES ('20251021203118_UpdateMovieAndSeatingPlan', '9.0.10');
+2025-10-21 22:37:45.125 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT RELEASE_LOCK('__MovieAPI_EFMigrationsLock')
+2025-10-21 22:40:38.643 +02:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2025-10-21 22:40:38.669 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT GET_LOCK('__MovieAPI_EFMigrationsLock', 259200)
+2025-10-21 22:40:38.709 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS `__EFMigrationsHistory` (
+    `MigrationId` varchar(150) CHARACTER SET utf8mb4 NOT NULL,
+    `ProductVersion` varchar(32) CHARACTER SET utf8mb4 NOT NULL,
+    CONSTRAINT `PK___EFMigrationsHistory` PRIMARY KEY (`MigrationId`)
+) CHARACTER SET=utf8mb4;
+2025-10-21 22:40:38.722 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='MovieAPI' AND TABLE_NAME='__EFMigrationsHistory';
+2025-10-21 22:40:38.724 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2025-10-21 22:40:38.730 +02:00 [INF] Applying migration '20251021204032_UpdateMovieAndSeatingPlan'.
+2025-10-21 22:40:38.758 +02:00 [INF] Executed DbCommand (24ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE `Movies` ADD `SeatingPlanIds` longtext CHARACTER SET utf8mb4 NOT NULL;
+2025-10-21 22:40:38.760 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`)
+VALUES ('20251021204032_UpdateMovieAndSeatingPlan', '9.0.10');
+2025-10-21 22:40:38.762 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT RELEASE_LOCK('__MovieAPI_EFMigrationsLock')
+2025-10-21 22:57:24.268 +02:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2025-10-21 22:57:24.293 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT GET_LOCK('__MovieAPI_EFMigrationsLock', 259200)
+2025-10-21 22:57:24.334 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS `__EFMigrationsHistory` (
+    `MigrationId` varchar(150) CHARACTER SET utf8mb4 NOT NULL,
+    `ProductVersion` varchar(32) CHARACTER SET utf8mb4 NOT NULL,
+    CONSTRAINT `PK___EFMigrationsHistory` PRIMARY KEY (`MigrationId`)
+) CHARACTER SET=utf8mb4;
+2025-10-21 22:57:24.346 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='MovieAPI' AND TABLE_NAME='__EFMigrationsHistory';
+2025-10-21 22:57:24.349 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2025-10-21 22:57:24.355 +02:00 [INF] Applying migration '20251021205710_UpdateMovieAndSeatingPlanAndAuditorium'.
+2025-10-21 22:57:24.393 +02:00 [INF] Executed DbCommand (27ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE `SeatingPlans` DROP FOREIGN KEY `FK_SeatingPlans_Movies_MovieId`;
+2025-10-21 22:57:24.403 +02:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE `SeatingPlans` DROP INDEX `IX_SeatingPlans_MovieId`;
+2025-10-21 22:57:24.414 +02:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE `Movies` DROP COLUMN `SeatingPlanIds`;
+2025-10-21 22:57:24.424 +02:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE `SeatingPlans` RENAME COLUMN `MovieId` TO `AuditoriumId`;
+2025-10-21 22:57:24.435 +02:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE `Movies` ADD `AuditoriumId` int NOT NULL DEFAULT 0;
+2025-10-21 22:57:24.442 +02:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `Auditoriums` (
+    `Id` int NOT NULL AUTO_INCREMENT,
+    `AuditoriumName` varchar(100) CHARACTER SET utf8mb4 NOT NULL,
+    CONSTRAINT `PK_Auditoriums` PRIMARY KEY (`Id`)
+) CHARACTER SET=utf8mb4;
+2025-10-21 22:57:24.449 +02:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `AuditoriumMovie` (
+    `AuditoriumsId` int NOT NULL,
+    `MoviesId` int NOT NULL,
+    CONSTRAINT `PK_AuditoriumMovie` PRIMARY KEY (`AuditoriumsId`, `MoviesId`),
+    CONSTRAINT `FK_AuditoriumMovie_Auditoriums_AuditoriumsId` FOREIGN KEY (`AuditoriumsId`) REFERENCES `Auditoriums` (`Id`) ON DELETE CASCADE,
+    CONSTRAINT `FK_AuditoriumMovie_Movies_MoviesId` FOREIGN KEY (`MoviesId`) REFERENCES `Movies` (`Id`) ON DELETE CASCADE
+) CHARACTER SET=utf8mb4;
+2025-10-21 22:57:24.460 +02:00 [INF] Executed DbCommand (10ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX `IX_SeatingPlans_AuditoriumId` ON `SeatingPlans` (`AuditoriumId`);
+2025-10-21 22:57:24.471 +02:00 [INF] Executed DbCommand (10ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX `IX_AuditoriumMovie_MoviesId` ON `AuditoriumMovie` (`MoviesId`);
+2025-10-21 22:57:24.488 +02:00 [INF] Executed DbCommand (16ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE `SeatingPlans` ADD CONSTRAINT `FK_SeatingPlans_Auditoriums_AuditoriumId` FOREIGN KEY (`AuditoriumId`) REFERENCES `Auditoriums` (`Id`) ON DELETE CASCADE;
+2025-10-21 22:57:24.490 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`)
+VALUES ('20251021205710_UpdateMovieAndSeatingPlanAndAuditorium', '9.0.10');
+2025-10-21 22:57:24.492 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT RELEASE_LOCK('__MovieAPI_EFMigrationsLock')
+2025-10-21 23:01:31.659 +02:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2025-10-21 23:01:31.685 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT GET_LOCK('__MovieAPI_EFMigrationsLock', 259200)
+2025-10-21 23:01:31.725 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS `__EFMigrationsHistory` (
+    `MigrationId` varchar(150) CHARACTER SET utf8mb4 NOT NULL,
+    `ProductVersion` varchar(32) CHARACTER SET utf8mb4 NOT NULL,
+    CONSTRAINT `PK___EFMigrationsHistory` PRIMARY KEY (`MigrationId`)
+) CHARACTER SET=utf8mb4;
+2025-10-21 23:01:31.738 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='MovieAPI' AND TABLE_NAME='__EFMigrationsHistory';
+2025-10-21 23:01:31.740 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2025-10-21 23:01:31.746 +02:00 [INF] Applying migration '20251021210125_UpdateMovieAndSeatingPlanAndAuditorium'.
+2025-10-21 23:01:31.751 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO `__EFMigrationsHistory` (`MigrationId`, `ProductVersion`)
+VALUES ('20251021210125_UpdateMovieAndSeatingPlanAndAuditorium', '9.0.10');
+2025-10-21 23:01:31.753 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT RELEASE_LOCK('__MovieAPI_EFMigrationsLock')
+2025-10-21 23:13:04.972 +02:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='MovieAPI' AND TABLE_NAME='__EFMigrationsHistory';
+2025-10-21 23:13:05.017 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2025-10-21 23:13:21.803 +02:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2025-10-21 23:13:21.829 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT GET_LOCK('__MovieAPI_EFMigrationsLock', 259200)
+2025-10-21 23:13:21.869 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS `__EFMigrationsHistory` (
+    `MigrationId` varchar(150) CHARACTER SET utf8mb4 NOT NULL,
+    `ProductVersion` varchar(32) CHARACTER SET utf8mb4 NOT NULL,
+    CONSTRAINT `PK___EFMigrationsHistory` PRIMARY KEY (`MigrationId`)
+) CHARACTER SET=utf8mb4;
+2025-10-21 23:13:21.882 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='MovieAPI' AND TABLE_NAME='__EFMigrationsHistory';
+2025-10-21 23:13:21.884 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2025-10-21 23:13:21.890 +02:00 [INF] Applying migration '20251021211313_UpdateMovieAndSeatingPlanAndAuditorium'.
+2025-10-21 23:13:21.902 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER DATABASE CHARACTER SET utf8mb4;
+2025-10-21 23:13:21.905 +02:00 [ERR] Failed executing DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `Auditoriums` (
+    `Id` int NOT NULL AUTO_INCREMENT,
+    `AuditoriumName` varchar(100) CHARACTER SET utf8mb4 NOT NULL,
+    CONSTRAINT `PK_Auditoriums` PRIMARY KEY (`Id`)
+) CHARACTER SET=utf8mb4;
+2025-10-21 23:13:49.049 +02:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2025-10-21 23:13:49.074 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT GET_LOCK('__MovieAPI_EFMigrationsLock', 259200)
+2025-10-21 23:13:49.113 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS `__EFMigrationsHistory` (
+    `MigrationId` varchar(150) CHARACTER SET utf8mb4 NOT NULL,
+    `ProductVersion` varchar(32) CHARACTER SET utf8mb4 NOT NULL,
+    CONSTRAINT `PK___EFMigrationsHistory` PRIMARY KEY (`MigrationId`)
+) CHARACTER SET=utf8mb4;
+2025-10-21 23:13:49.126 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='MovieAPI' AND TABLE_NAME='__EFMigrationsHistory';
+2025-10-21 23:13:49.129 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2025-10-21 23:13:49.135 +02:00 [INF] Applying migration '20251021211343_UpdateMovieAndSeatingPlanAndAuditorium'.
+2025-10-21 23:13:49.147 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER DATABASE CHARACTER SET utf8mb4;
+2025-10-21 23:13:49.149 +02:00 [ERR] Failed executing DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `Auditoriums` (
+    `Id` int NOT NULL AUTO_INCREMENT,
+    `AuditoriumName` varchar(100) CHARACTER SET utf8mb4 NOT NULL,
+    CONSTRAINT `PK_Auditoriums` PRIMARY KEY (`Id`)
+) CHARACTER SET=utf8mb4;
+2025-10-21 23:16:34.021 +02:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2025-10-21 23:16:34.046 +02:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT GET_LOCK('__MovieAPI_EFMigrationsLock', 259200)
+2025-10-21 23:16:34.086 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS `__EFMigrationsHistory` (
+    `MigrationId` varchar(150) CHARACTER SET utf8mb4 NOT NULL,
+    `ProductVersion` varchar(32) CHARACTER SET utf8mb4 NOT NULL,
+    CONSTRAINT `PK___EFMigrationsHistory` PRIMARY KEY (`MigrationId`)
+) CHARACTER SET=utf8mb4;
+2025-10-21 23:16:34.099 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1 FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='MovieAPI' AND TABLE_NAME='__EFMigrationsHistory';
+2025-10-21 23:16:34.101 +02:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT `MigrationId`, `ProductVersion`
+FROM `__EFMigrationsHistory`
+ORDER BY `MigrationId`;
+2025-10-21 23:16:34.107 +02:00 [INF] Applying migration '20251021211625_MovieAndSeatingAndAuditorium'.
+2025-10-21 23:16:34.119 +02:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER DATABASE CHARACTER SET utf8mb4;
+2025-10-21 23:16:34.122 +02:00 [ERR] Failed executing DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE `Auditoriums` (
+    `Id` int NOT NULL AUTO_INCREMENT,
+    `AuditoriumName` varchar(100) CHARACTER SET utf8mb4 NOT NULL,
+    CONSTRAINT `PK_Auditoriums` PRIMARY KEY (`Id`)
+) CHARACTER SET=utf8mb4;
