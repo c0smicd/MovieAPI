@@ -131,3 +131,43 @@ LIMIT 1
 2025-10-24 00:59:55.883 +02:00 [INF] Executed action MovieAPI.Controller.MovieController.GetMovie (MovieAPI) in 3.5045ms
 2025-10-24 00:59:55.884 +02:00 [INF] Executed endpoint 'MovieAPI.Controller.MovieController.GetMovie (MovieAPI)'
 2025-10-24 00:59:55.885 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5165/api/v1/films/1 - 200 null application/json; charset=utf-8 9.9479ms
+2025-10-24 01:09:23.185 +02:00 [INF] Application is shutting down...
+2025-10-24 01:09:25.582 +02:00 [INF] Now listening on: http://localhost:5165
+2025-10-24 01:09:25.602 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-24 01:09:25.603 +02:00 [INF] Hosting environment: Development
+2025-10-24 01:09:25.604 +02:00 [INF] Content root path: C:\Users\lukas\RiderProjects\MovieAPI\MovieAPI
+2025-10-24 19:58:57.728 +02:00 [INF] Now listening on: http://localhost:5165
+2025-10-24 19:58:57.758 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-24 19:58:57.760 +02:00 [INF] Hosting environment: Development
+2025-10-24 19:58:57.761 +02:00 [INF] Content root path: C:\Users\lukas\RiderProjects\MovieAPI\MovieAPI
+2025-10-24 19:58:58.639 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5165/swagger/index.html - null null
+2025-10-24 19:58:58.803 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5165/swagger/index.html - 200 null text/html;charset=utf-8 164.8939ms
+2025-10-24 19:58:59.243 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5165/swagger/v1/swagger.json - null null
+2025-10-24 19:58:59.370 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5165/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 127.6146ms
+2025-10-24 19:59:12.884 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5165/api/v1/films/1 - null null
+2025-10-24 19:59:12.907 +02:00 [WRN] Failed to determine the https port for redirect.
+2025-10-24 19:59:12.910 +02:00 [INF] Executing endpoint 'MovieAPI.Controller.MovieController.GetMovie (MovieAPI)'
+2025-10-24 19:59:12.935 +02:00 [INF] Route matched with {action = "GetMovie", controller = "Movie"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MovieAPI.DTOs.Response.MovieDToResponse]] GetMovie(Int32) on controller MovieAPI.Controller.MovieController (MovieAPI).
+2025-10-24 19:59:13.257 +02:00 [INF] Executing action method MovieAPI.Controller.MovieController.GetMovie (MovieAPI) - Validation state: "Valid"
+2025-10-24 19:59:14.393 +02:00 [INF] Executed DbCommand (36ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT `m`.`Id`, `m`.`Title`, `m`.`Rating`, `m`.`Genre`, `m`.`PosterUrl`
+FROM `Movies` AS `m`
+WHERE `m`.`Id` = @__id_0
+LIMIT 1
+2025-10-24 19:59:14.436 +02:00 [INF] MovieId '1' retrieved successfully
+2025-10-24 19:59:14.442 +02:00 [INF] Executed action method MovieAPI.Controller.MovieController.GetMovie (MovieAPI), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 1178.6855ms.
+2025-10-24 19:59:14.454 +02:00 [INF] Executing OkObjectResult, writing value of type 'MovieAPI.DTOs.Response.MovieDToResponse'.
+2025-10-24 19:59:14.501 +02:00 [INF] Executed action MovieAPI.Controller.MovieController.GetMovie (MovieAPI) in 1559.2476ms
+2025-10-24 19:59:14.504 +02:00 [INF] Executed endpoint 'MovieAPI.Controller.MovieController.GetMovie (MovieAPI)'
+2025-10-24 19:59:14.520 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5165/api/v1/films/1 - 200 null application/json; charset=utf-8 1636.4132ms
+2025-10-24 19:59:26.647 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5165/api/v1/films/1 - null null
+2025-10-24 19:59:26.651 +02:00 [INF] Executing endpoint 'MovieAPI.Controller.MovieController.GetMovie (MovieAPI)'
+2025-10-24 19:59:26.653 +02:00 [INF] Route matched with {action = "GetMovie", controller = "Movie"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MovieAPI.DTOs.Response.MovieDToResponse]] GetMovie(Int32) on controller MovieAPI.Controller.MovieController (MovieAPI).
+2025-10-24 19:59:26.656 +02:00 [INF] Executing action method MovieAPI.Controller.MovieController.GetMovie (MovieAPI) - Validation state: "Valid"
+2025-10-24 19:59:26.658 +02:00 [INF] Returning cached movie for MovieId '1'
+2025-10-24 19:59:26.659 +02:00 [INF] Executed action method MovieAPI.Controller.MovieController.GetMovie (MovieAPI), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 1.6832ms.
+2025-10-24 19:59:26.662 +02:00 [INF] Executing OkObjectResult, writing value of type 'MovieAPI.DTOs.Response.MovieDToResponse'.
+2025-10-24 19:59:26.664 +02:00 [INF] Executed action MovieAPI.Controller.MovieController.GetMovie (MovieAPI) in 8.9969ms
+2025-10-24 19:59:26.665 +02:00 [INF] Executed endpoint 'MovieAPI.Controller.MovieController.GetMovie (MovieAPI)'
+2025-10-24 19:59:26.667 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5165/api/v1/films/1 - 200 null application/json; charset=utf-8 19.6579ms
+2025-10-24 20:23:04.073 +02:00 [INF] Application is shutting down...

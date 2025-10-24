@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using MovieAPI.Constants;
@@ -13,23 +14,23 @@ namespace MovieAPI.Controller;
 [Route("api/v1/films")]
 public class MovieController : ControllerBase
 {
+    private readonly IMemoryCache _cache;
     private readonly AppDbContext _context;
     private readonly ILogger<MovieController> _logger;
-    private readonly IMemoryCache _cache;
-    
-    
-    public MovieController(AppDbContext context,  ILogger<MovieController> logger, IMemoryCache cache)
+
+
+    public MovieController(AppDbContext context, ILogger<MovieController> logger, IMemoryCache cache)
     {
         _context = context;
         _logger = logger;
         _cache = cache;
     }
-    
+
     // ---------------------------------------------- GET METHODS ----------------------------------------------
-    
-    
+
+
     /// <summary>
-    ///  Get all movies with pagination
+    ///     Get all movies with pagination
     /// </summary>
     /// <param name="page">The current page</param>
     /// <param name="pageSize">The size of every page</param>
@@ -37,14 +38,12 @@ public class MovieController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<MovieDToResponse>>> GetMovies(int page = 1, int pageSize = 10)
     {
-        
-
         if (_cache.TryGetValue(CacheKeys.MoviesByPage(page, pageSize), out MovieDToResponse[]? cachedFilms))
         {
             _logger.LogInformation("Returning cached movies for page {page}", page);
             return Ok(cachedFilms);
         }
-        
+
         try
         {
             var films = await _context.Movies
@@ -60,31 +59,30 @@ public class MovieController : ControllerBase
                     PosterUrl = m.PosterUrl
                 })
                 .ToArrayAsync();
-            
+
             _cache.Set(CacheKeys.MoviesByPage(page, pageSize), films, TimeSpan.FromMinutes(10)); // Cache for 10 minutes
-                
-            _logger.LogInformation("'{films.length}' films from page '{page}' where retrieved", films.Length, page); // Log information 
+
+            _logger.LogInformation("'{films.length}' films from page '{page}' where retrieved", films.Length,
+                page); // Log information 
             return Ok(films); // Return 200
         }
         catch (Exception ex) // If server had a hiccup
         {
-            _logger.LogError("Error while retrieving all movies: {ex}" , ex); // Log Error
-            
+            _logger.LogError("Error while retrieving all movies: {ex}", ex); // Log Error
+
             return StatusCode(500, new { message = "Internal server error" }); // Return 500
         }
-        
     }
-    
-    [HttpGet("by-auditorium/{auditoriumId}")]
+
+    [HttpGet("by-auditorium/{auditoriumId:int}")]
     public async Task<ActionResult<IEnumerable<MovieDToResponse>>> GetAllMovies(int auditoriumId)
     {
-        
         if (_cache.TryGetValue(CacheKeys.MoviesByAuditorium(auditoriumId), out MovieDToResponse[]? cachedFilms))
         {
             _logger.LogInformation("Returning cached movies for auditoriumId {auditoriumId}", auditoriumId);
             return Ok(cachedFilms);
         }
-        
+
         try
         {
             var films = await _context.Movies
@@ -98,36 +96,37 @@ public class MovieController : ControllerBase
                     PosterUrl = m.PosterUrl
                 })
                 .ToArrayAsync();
-            
-            _cache.Set(CacheKeys.MoviesByAuditorium(auditoriumId), films, TimeSpan.FromMinutes(5)); // Cache for 5 minutes
-                
-            _logger.LogInformation("'{films.length}' films for auditoriumId '{auditoriumId}' were retrieved", films.Length, auditoriumId); // Log information 
+
+            _cache.Set(CacheKeys.MoviesByAuditorium(auditoriumId), films,
+                TimeSpan.FromMinutes(5)); // Cache for 5 minutes
+
+            _logger.LogInformation("'{films.length}' films for auditoriumId '{auditoriumId}' were retrieved",
+                films.Length, auditoriumId); // Log information 
             return Ok(films); // Return 200
         }
         catch (Exception ex) // If server had a hiccup
         {
-            _logger.LogError("Error while retrieving movies for auditoriumId '{auditoriumId}': {ex}", auditoriumId, ex); // Log Error
-            
+            _logger.LogError("Error while retrieving movies for auditoriumId '{auditoriumId}': {ex}", auditoriumId,
+                ex); // Log Error
+
             return StatusCode(500, new { message = "Internal server error" }); // Return 500
         }
-        
     }
-    
+
     /// <summary>
-    ///  Get movie by id
+    ///     Get movie by id
     /// </summary>
     /// <param name="id"> The ID of the movie </param>
     /// <returns></returns>
-    [HttpGet("{id}")]
+    [HttpGet("{id:int}")]
     public async Task<ActionResult<MovieDToResponse>> GetMovie(int id)
     {
-        
         if (_cache.TryGetValue(CacheKeys.MovieById(id), out MovieDToResponse? cachedMovie))
         {
             _logger.LogInformation("Returning cached movie for MovieId '{id}'", id); // Log Information
             return Ok(cachedMovie);
         }
-        
+
         try
         {
             var movie = await _context.Movies
@@ -147,9 +146,9 @@ public class MovieController : ControllerBase
                 _logger.LogWarning("MovieId '{id}' not found", id); // Log warning 
                 return NotFound(new { message = "Film not found" }); // Return 404
             }
-            
+
             _cache.Set(CacheKeys.MovieById(id), movie, TimeSpan.FromMinutes(30)); // Cache for 30 minutes
-            
+
             // Movie with id found
             _logger.LogInformation("MovieId '{id}' retrieved successfully", id); // Log Information
             return Ok(movie); // return 200
@@ -159,18 +158,16 @@ public class MovieController : ControllerBase
             _logger.LogError("Error while retrieving movie '{id}: {ex}", id, ex); // Log Error
             return StatusCode(500, new { message = "Internal server error" }); // Return 500
         }
-
     }
-    
-    
+
+
     //---------------------------------------------- CREATE METHODS ------------------------------------------------
 
     [HttpPost]
     public async Task<ActionResult<MovieDToResponse>> CreateMovie(
-        [FromBody] MovieDToRequest movieDto,
+        [FromBody] MovieDToCreate movieDto,
         [FromHeader(Name = "Idempotency-Key")] string? idempotencyKey = null)
     {
-        
         if (!string.IsNullOrEmpty(idempotencyKey))
         {
             var existingRecord = await _context.IdempotencyRecords
@@ -178,14 +175,15 @@ public class MovieController : ControllerBase
 
             if (existingRecord != null)
             {
-                _logger.LogWarning("{time} - Idempotent request with key '{key}' found, returning cached response", DateTime.UtcNow, idempotencyKey); // Log Information
-                
-                var cachedResponse = System.Text.Json.JsonSerializer.Deserialize<MovieDToResponse>(existingRecord.ResponseBody);
-                
+                _logger.LogWarning("{time} - Idempotent request with key '{key}' found, returning cached response",
+                    DateTime.UtcNow, idempotencyKey); // Log Information
+
+                var cachedResponse = JsonSerializer.Deserialize<MovieDToResponse>(existingRecord.ResponseBody);
+
                 return StatusCode(existingRecord.StatusCode, cachedResponse);
             }
         }
-        
+
         try
         {
             var movie = new Movie
@@ -198,15 +196,15 @@ public class MovieController : ControllerBase
                 RuntimeMinutes = movieDto.RuntimeMinutes,
                 Genre = movieDto.Genre,
                 PosterUrl = movieDto.PosterUrl,
-                CreatedAt = DateTime.UtcNow,
+                CreatedAt = movieDto.CreatedAt,
                 UpdatedAt = movieDto.UpdatedAt
             };
 
             // Link Auditoriums
-            if (movieDto.AuditoriumIds.Count > 0)
+            if (movieDto.AuditoriumIds is { Count: > 0 } auditoriumIds)
             {
                 var auditoriums = await _context.Auditoriums
-                    .Where(a => movieDto.AuditoriumIds.Contains(a.Id))
+                    .Where(a => auditoriumIds.Contains(a.Id))
                     .ToListAsync();
 
                 movie.Auditoriums = auditoriums;
@@ -223,7 +221,7 @@ public class MovieController : ControllerBase
                 Genre = movie.Genre,
                 PosterUrl = movie.PosterUrl
             };
-            
+
             // Store Idempotency Record
 
             if (!string.IsNullOrEmpty(idempotencyKey))
@@ -233,21 +231,18 @@ public class MovieController : ControllerBase
                     IdempotencyKey = idempotencyKey,
                     RequestPath = HttpContext.Request.Path,
                     StatusCode = 201,
-                    ResponseBody = System.Text.Json.JsonSerializer.Serialize(responseDto),
+                    ResponseBody = JsonSerializer.Serialize(responseDto),
                     CreatedAt = DateTime.UtcNow,
-                    ExpiresAt = DateTime.UtcNow.AddMinutes(5) 
+                    ExpiresAt = DateTime.UtcNow.AddMinutes(5)
                 };
-                
+
                 _context.IdempotencyRecords.Add(idempotencyRecord);
-                
+
                 await _context.SaveChangesAsync();
             }
-            
+
             // Clear every cache related to movies upon creation, because cannot distinguish what data is stale, caused by Pagination
-            if (_cache is MemoryCache concreteMemoryCache)
-            {
-                concreteMemoryCache.Clear();
-            }
+            if (_cache is MemoryCache concreteMemoryCache) concreteMemoryCache.Clear();
 
             _logger.LogInformation("MovieId '{id}' created successfully", movie.Id); // Log Information
             return CreatedAtAction(nameof(GetMovie), new { id = movie.Id }, responseDto); // Return 201
@@ -258,15 +253,14 @@ public class MovieController : ControllerBase
             return StatusCode(500, new { message = "Internal server error" }); // Return 500
         }
     }
-    
-    
+
+
     // ---------------------------------------------- UPDATE/PATCH ----------------------------------------------
 
 
     [HttpPatch("{id}")]
     public async Task<IActionResult> UpdateMovie(int id, [FromBody] MovieDToPatch movieDto)
     {
-        
         try
         {
             var movie = await _context.Movies
@@ -278,7 +272,7 @@ public class MovieController : ControllerBase
                 _logger.LogWarning("MovieId '{id}' not found for update", id); // Log Warning
                 return NotFound(new { message = "Film not found" }); // Return 404
             }
-            
+
             var currentAuditoriumIds = movie.Auditoriums.Select(a => a.Id).ToList();
 
             // Update fields if provided
@@ -293,14 +287,12 @@ public class MovieController : ControllerBase
             movie.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
-            
+
             _cache.Remove(CacheKeys.MovieById(id)); // Invalidate cache for this movie
-            
+
             // Invalidate Cache for all auditoriums related to this movie
             foreach (var auditoriumId in currentAuditoriumIds)
-            {
                 _cache.Remove(CacheKeys.MoviesByAuditorium(auditoriumId));
-            }
 
             _logger.LogInformation("MovieId '{id}' updated successfully", id); // Log Information
             return NoContent(); // Return 204
@@ -310,7 +302,5 @@ public class MovieController : ControllerBase
             _logger.LogError("Error while updating movie '{id}': {ex}", id, ex); // Log Error
             return StatusCode(500, new { message = "Internal server error" }); // Return 500
         }
-
     }
-    
 }
