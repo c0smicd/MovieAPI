@@ -264,7 +264,7 @@ public class MovieController : ControllerBase
 
 
     [HttpPatch("{id}")]
-    public async Task<IActionResult> UpdateMovie(int id, [FromBody] MovieDToRequest movieDto)
+    public async Task<IActionResult> UpdateMovie(int id, [FromBody] MovieDToPatch movieDto)
     {
         
         try

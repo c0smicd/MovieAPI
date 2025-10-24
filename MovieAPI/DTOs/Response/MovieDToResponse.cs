@@ -2,9 +2,9 @@
 
 public class MovieDToResponse
 {
-    public int Id { get; set; }
-    public string Title { get; set; } = string.Empty;
-    public double? Rating { get; set; }
-    public string? Genre { get; set; }
-    public string? PosterUrl { get; set; }
+    public int Id { get; init; }
+    public string Title { get; init; } = string.Empty;
+    public double? Rating { get; init; }
+    public string? Genre { get; init; }
+    public string? PosterUrl { get; init; }
 }
