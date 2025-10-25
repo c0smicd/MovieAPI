@@ -24,6 +24,22 @@
           "build/netstandard1.0/coverlet.collector.targets": {}
         }
       },
+      "FakeItEasy/8.3.0": {
+        "type": "package",
+        "dependencies": {
+          "Castle.Core": "5.1.1"
+        },
+        "compile": {
+          "lib/net8.0/FakeItEasy.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/FakeItEasy.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "FluentAssertions/8.8.0": {
         "type": "package",
         "compile": {
@@ -106,6 +122,24 @@
       },
       "Microsoft.EntityFrameworkCore.Analyzers/9.0.10": {
         "type": "package"
+      },
+      "Microsoft.EntityFrameworkCore.InMemory/9.0.10": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "9.0.10",
+          "Microsoft.Extensions.Caching.Memory": "9.0.10",
+          "Microsoft.Extensions.Logging": "9.0.10"
+        },
+        "compile": {
+          "lib/net8.0/Microsoft.EntityFrameworkCore.InMemory.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.EntityFrameworkCore.InMemory.dll": {
+            "related": ".xml"
+          }
+        }
       },
       "Microsoft.EntityFrameworkCore.Relational/9.0.0": {
         "type": "package",
@@ -2519,6 +2553,7 @@
         "dependencies": {
           "Microsoft.AspNetCore.OpenApi": "8.0.21",
           "Microsoft.EntityFrameworkCore": "9.0.10",
+          "Microsoft.EntityFrameworkCore.InMemory": "9.0.10",
           "Microsoft.Extensions.Caching.StackExchangeRedis": "9.0.10",
           "Pomelo.EntityFrameworkCore.MySql": "9.0.0",
           "Serilog.AspNetCore": "9.0.0",
@@ -2613,6 +2648,29 @@
         "coverlet-icon.png",
         "coverlet.collector.6.0.0.nupkg.sha512",
         "coverlet.collector.nuspec"
+      ]
+    },
+    "FakeItEasy/8.3.0": {
+      "sha512": "5QmShA6njFOhQHUYrFUjWEepfRcbQLOhgctaFhWyhPTi17kVGNyZOdvJ/2HhoNthmdghIzNsnZsMScJZhVBaQQ==",
+      "type": "package",
+      "path": "fakeiteasy/8.3.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "fakeiteasy.8.3.0.nupkg.sha512",
+        "fakeiteasy.nuspec",
+        "images/FakeItEasy.png",
+        "lib/net462/FakeItEasy.dll",
+        "lib/net462/FakeItEasy.xml",
+        "lib/net6.0/FakeItEasy.dll",
+        "lib/net6.0/FakeItEasy.xml",
+        "lib/net8.0/FakeItEasy.dll",
+        "lib/net8.0/FakeItEasy.xml",
+        "lib/netstandard2.0/FakeItEasy.dll",
+        "lib/netstandard2.0/FakeItEasy.xml",
+        "lib/netstandard2.1/FakeItEasy.dll",
+        "lib/netstandard2.1/FakeItEasy.xml"
       ]
     },
     "FluentAssertions/8.8.0": {
@@ -2764,6 +2822,21 @@
         "docs/PACKAGE.md",
         "microsoft.entityframeworkcore.analyzers.9.0.10.nupkg.sha512",
         "microsoft.entityframeworkcore.analyzers.nuspec"
+      ]
+    },
+    "Microsoft.EntityFrameworkCore.InMemory/9.0.10": {
+      "sha512": "fRnQ7qcHNINRoErantws9k3CdjcYwvbx+fLB3ZDN/EDC7kt93J3fPB15aEbnum2JiFPbw3fgr9iOGWyxaRXD9Q==",
+      "type": "package",
+      "path": "microsoft.entityframeworkcore.inmemory/9.0.10",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "PACKAGE.md",
+        "lib/net8.0/Microsoft.EntityFrameworkCore.InMemory.dll",
+        "lib/net8.0/Microsoft.EntityFrameworkCore.InMemory.xml",
+        "microsoft.entityframeworkcore.inmemory.9.0.10.nupkg.sha512",
+        "microsoft.entityframeworkcore.inmemory.nuspec"
       ]
     },
     "Microsoft.EntityFrameworkCore.Relational/9.0.0": {
@@ -7783,6 +7856,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "FakeItEasy >= 8.3.0",
       "FluentAssertions >= 8.8.0",
       "Microsoft.NET.Test.Sdk >= 17.6.0",
       "Moq >= 4.20.72",
@@ -7793,19 +7867,19 @@
     ]
   },
   "packageFolders": {
-    "/Users/lukasmuller/.nuget/packages/": {}
+    "C:\\Users\\lukas\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/lukasmuller/RiderProjects/Compeso-MovieAPI/MovieAPITests/MovieAPITests.csproj",
+      "projectUniqueName": "C:\\Users\\lukas\\RiderProjects\\MovieAPI\\MovieAPITests\\MovieAPITests.csproj",
       "projectName": "MovieAPITests",
-      "projectPath": "/Users/lukasmuller/RiderProjects/Compeso-MovieAPI/MovieAPITests/MovieAPITests.csproj",
-      "packagesPath": "/Users/lukasmuller/.nuget/packages/",
-      "outputPath": "/Users/lukasmuller/RiderProjects/Compeso-MovieAPI/MovieAPITests/obj/",
+      "projectPath": "C:\\Users\\lukas\\RiderProjects\\MovieAPI\\MovieAPITests\\MovieAPITests.csproj",
+      "packagesPath": "C:\\Users\\lukas\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\lukas\\RiderProjects\\MovieAPI\\MovieAPITests\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/lukasmuller/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\lukas\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -7817,8 +7891,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/Users/lukasmuller/RiderProjects/Compeso-MovieAPI/MovieAPI/MovieAPI.csproj": {
-              "projectPath": "/Users/lukasmuller/RiderProjects/Compeso-MovieAPI/MovieAPI/MovieAPI.csproj"
+            "C:\\Users\\lukas\\RiderProjects\\MovieAPI\\MovieAPI\\MovieAPI.csproj": {
+              "projectPath": "C:\\Users\\lukas\\RiderProjects\\MovieAPI\\MovieAPI\\MovieAPI.csproj"
             }
           }
         }
@@ -7833,6 +7907,10 @@
       "net8.0": {
         "targetAlias": "net8.0",
         "dependencies": {
+          "FakeItEasy": {
+            "target": "Package",
+            "version": "[8.3.0, )"
+          },
           "FluentAssertions": {
             "target": "Package",
             "version": "[8.8.0, )"
@@ -7878,7 +7956,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.121/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.121/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

@@ -1,112 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/lukasmuller/RiderProjects/Compeso-MovieAPI/MovieAPITests/MovieAPITests.csproj": {}
+    "C:\\Users\\lukas\\RiderProjects\\MovieAPI\\MovieAPITests\\MovieAPITests.csproj": {}
   },
   "projects": {
-    "/Users/lukasmuller/RiderProjects/Compeso-MovieAPI/MovieAPI/MovieAPI.csproj": {
+    "C:\\Users\\lukas\\RiderProjects\\MovieAPI\\MovieAPITests\\MovieAPITests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/lukasmuller/RiderProjects/Compeso-MovieAPI/MovieAPI/MovieAPI.csproj",
-        "projectName": "MovieAPI",
-        "projectPath": "/Users/lukasmuller/RiderProjects/Compeso-MovieAPI/MovieAPI/MovieAPI.csproj",
-        "packagesPath": "/Users/lukasmuller/.nuget/packages/",
-        "outputPath": "/Users/lukasmuller/RiderProjects/Compeso-MovieAPI/MovieAPI/obj/",
-        "projectStyle": "PackageReference",
-        "configFilePaths": [
-          "/Users/lukasmuller/.nuget/NuGet/NuGet.Config"
-        ],
-        "originalTargetFrameworks": [
-          "net8.0"
-        ],
-        "sources": {
-          "https://api.nuget.org/v3/index.json": {}
-        },
-        "frameworks": {
-          "net8.0": {
-            "targetAlias": "net8.0",
-            "projectReferences": {}
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        }
-      },
-      "frameworks": {
-        "net8.0": {
-          "targetAlias": "net8.0",
-          "dependencies": {
-            "Microsoft.AspNetCore.OpenApi": {
-              "target": "Package",
-              "version": "[8.0.21, )"
-            },
-            "Microsoft.EntityFrameworkCore": {
-              "target": "Package",
-              "version": "[9.0.10, )"
-            },
-            "Microsoft.EntityFrameworkCore.Design": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[9.0.10, )"
-            },
-            "Microsoft.Extensions.Caching.StackExchangeRedis": {
-              "target": "Package",
-              "version": "[9.0.10, )"
-            },
-            "Pomelo.EntityFrameworkCore.MySql": {
-              "target": "Package",
-              "version": "[9.0.0, )"
-            },
-            "Serilog.AspNetCore": {
-              "target": "Package",
-              "version": "[9.0.0, )"
-            },
-            "Serilog.Sinks.File": {
-              "target": "Package",
-              "version": "[7.0.0, )"
-            },
-            "Swashbuckle.AspNetCore": {
-              "target": "Package",
-              "version": "[6.6.2, )"
-            }
-          },
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48",
-            "net481"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.AspNetCore.App": {
-              "privateAssets": "none"
-            },
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.121/PortableRuntimeIdentifierGraph.json"
-        }
-      }
-    },
-    "/Users/lukasmuller/RiderProjects/Compeso-MovieAPI/MovieAPITests/MovieAPITests.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "/Users/lukasmuller/RiderProjects/Compeso-MovieAPI/MovieAPITests/MovieAPITests.csproj",
+        "projectUniqueName": "C:\\Users\\lukas\\RiderProjects\\MovieAPI\\MovieAPITests\\MovieAPITests.csproj",
         "projectName": "MovieAPITests",
-        "projectPath": "/Users/lukasmuller/RiderProjects/Compeso-MovieAPI/MovieAPITests/MovieAPITests.csproj",
-        "packagesPath": "/Users/lukasmuller/.nuget/packages/",
-        "outputPath": "/Users/lukasmuller/RiderProjects/Compeso-MovieAPI/MovieAPITests/obj/",
+        "projectPath": "C:\\Users\\lukas\\RiderProjects\\MovieAPI\\MovieAPITests\\MovieAPITests.csproj",
+        "packagesPath": "C:\\Users\\lukas\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\lukas\\RiderProjects\\MovieAPI\\MovieAPITests\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/lukasmuller/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\lukas\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -118,8 +26,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/Users/lukasmuller/RiderProjects/Compeso-MovieAPI/MovieAPI/MovieAPI.csproj": {
-                "projectPath": "/Users/lukasmuller/RiderProjects/Compeso-MovieAPI/MovieAPI/MovieAPI.csproj"
+              "C:\\Users\\lukas\\RiderProjects\\MovieAPI\\MovieAPI\\MovieAPI.csproj": {
+                "projectPath": "C:\\Users\\lukas\\RiderProjects\\MovieAPI\\MovieAPI\\MovieAPI.csproj"
               }
             }
           }
@@ -134,6 +42,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "FakeItEasy": {
+              "target": "Package",
+              "version": "[8.3.0, )"
+            },
             "FluentAssertions": {
               "target": "Package",
               "version": "[8.8.0, )"
@@ -179,7 +91,103 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.121/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.121/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\lukas\\RiderProjects\\MovieAPI\\MovieAPI\\MovieAPI.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\lukas\\RiderProjects\\MovieAPI\\MovieAPI\\MovieAPI.csproj",
+        "projectName": "MovieAPI",
+        "projectPath": "C:\\Users\\lukas\\RiderProjects\\MovieAPI\\MovieAPI\\MovieAPI.csproj",
+        "packagesPath": "C:\\Users\\lukas\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\lukas\\RiderProjects\\MovieAPI\\MovieAPI\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\lukas\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.OpenApi": {
+              "target": "Package",
+              "version": "[8.0.21, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[9.0.10, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.10, )"
+            },
+            "Microsoft.EntityFrameworkCore.InMemory": {
+              "target": "Package",
+              "version": "[9.0.10, )"
+            },
+            "Microsoft.Extensions.Caching.StackExchangeRedis": {
+              "target": "Package",
+              "version": "[9.0.10, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Serilog.AspNetCore": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Serilog.Sinks.File": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.6.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.121/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

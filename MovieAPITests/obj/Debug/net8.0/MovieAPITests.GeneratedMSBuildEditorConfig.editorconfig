@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = MovieAPITests
-build_property.ProjectDir = /Users/lukasmuller/RiderProjects/Compeso-MovieAPI/MovieAPITests/
+build_property.ProjectDir = C:\Users\lukas\RiderProjects\MovieAPI\MovieAPITests\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

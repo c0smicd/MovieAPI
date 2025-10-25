@@ -36,6 +36,9 @@ public class MovieController : ControllerBase
     /// <param name="pageSize">The size of every page</param>
     /// <returns></returns>
     [HttpGet]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<MovieDToResponse>))]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
     public async Task<ActionResult<IEnumerable<MovieDToResponse>>> GetMovies(int page = 1, int pageSize = 10)
     {
         if (_cache.TryGetValue(CacheKeys.MoviesByPage(page, pageSize), out MovieDToResponse[]? cachedFilms))
@@ -60,6 +63,12 @@ public class MovieController : ControllerBase
                 })
                 .ToArrayAsync();
 
+            if (films.Length == 0)
+            {
+                _logger.LogWarning("No films found for page '{page}'", page); // Log warning
+                return NotFound(new { message = "No films found for the specified page" }); // Return 404
+            }
+
             _cache.Set(CacheKeys.MoviesByPage(page, pageSize), films, TimeSpan.FromMinutes(10)); // Cache for 10 minutes
 
             _logger.LogInformation("'{films.length}' films from page '{page}' where retrieved", films.Length,
@@ -75,6 +84,9 @@ public class MovieController : ControllerBase
     }
 
     [HttpGet("by-auditorium/{auditoriumId:int}")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<MovieDToResponse>))]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
     public async Task<ActionResult<IEnumerable<MovieDToResponse>>> GetAllMovies(int auditoriumId)
     {
         if (_cache.TryGetValue(CacheKeys.MoviesByAuditorium(auditoriumId), out MovieDToResponse[]? cachedFilms))
@@ -96,6 +108,12 @@ public class MovieController : ControllerBase
                     PosterUrl = m.PosterUrl
                 })
                 .ToArrayAsync();
+
+            if (films.Length == 0)
+            {
+                _logger.LogWarning("No films found for auditoriumId '{auditoriumId}'", auditoriumId); // Log warning
+                return NotFound(new { message = "No films found for the specified auditorium" }); // Return 404
+            }
 
             _cache.Set(CacheKeys.MoviesByAuditorium(auditoriumId), films,
                 TimeSpan.FromMinutes(5)); // Cache for 5 minutes
@@ -119,6 +137,9 @@ public class MovieController : ControllerBase
     /// <param name="id"> The ID of the movie </param>
     /// <returns></returns>
     [HttpGet("{id:int}")]
+    [ProducesResponseType(200, Type = typeof(MovieDToResponse))]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
     public async Task<ActionResult<MovieDToResponse>> GetMovie(int id)
     {
         if (_cache.TryGetValue(CacheKeys.MovieById(id), out MovieDToResponse? cachedMovie))
@@ -259,6 +280,9 @@ public class MovieController : ControllerBase
 
 
     [HttpPatch("{id}")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
     public async Task<IActionResult> UpdateMovie(int id, [FromBody] MovieDToPatch movieDto)
     {
         try
