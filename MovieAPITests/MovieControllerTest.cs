@@ -42,7 +42,7 @@ public class MovieControllerTest
             new MovieDToResponse { Id = 2, Title = "The Matrix", Rating = 9.0, Genre = "Action", PosterUrl = "poster2" }
         };
 
-        object cacheEntry = cachedMovies;
+        object? cacheEntry = cachedMovies;
         A.CallTo(() => _fakeCache.TryGetValue(A<object>._, out cacheEntry))
             .Returns(true);
 
