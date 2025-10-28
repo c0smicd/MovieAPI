@@ -1,7 +1,23 @@
-﻿bin/
+﻿# Build folders
+bin/
 obj/
-.vs/
-.idea/
+
+# User-specific files
 *.user
 *.suo
-appsettings.Development.json
+*.userosscache
+*.sln.docstates
+*.DotSettings
+
+# IDE
+.vscode/
+.idea/
+*.rider.*
+
+# NuGet
+*.nupkg
+*.nuget.g.props
+*.nuget.g.targets
+
+# Misc
+*.cache

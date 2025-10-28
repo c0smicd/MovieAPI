@@ -83,11 +83,17 @@ public class MovieController : ControllerBase
         }
     }
 
+    /// <summary>
+    ///   Get all movies by auditorium id
+    /// </summary>
+    /// <param name="auditoriumId">Id of the auditorium</param>
+    /// <returns></returns>
+
     [HttpGet("by-auditorium/{auditoriumId:int}")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<MovieDToResponse>))]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
-    public async Task<ActionResult<IEnumerable<MovieDToResponse>>> GetAllMovies(int auditoriumId)
+    public async Task<ActionResult<IEnumerable<MovieDToResponse>>> GetMovies(int auditoriumId)
     {
         if (_cache.TryGetValue(CacheKeys.MoviesByAuditorium(auditoriumId), out MovieDToResponse[]? cachedFilms))
         {
@@ -135,7 +141,9 @@ public class MovieController : ControllerBase
     ///     Get movie by id
     /// </summary>
     /// <param name="id"> The ID of the movie </param>
-    /// <returns></returns>
+    /// <returns>
+    ///     It returns the movie with the specified ID.
+    /// </returns>
     [HttpGet("{id:int}")]
     [ProducesResponseType(200, Type = typeof(MovieDToResponse))]
     [ProducesResponseType(404)]

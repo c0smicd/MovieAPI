@@ -1,6 +1,6 @@
 namespace MovieAPI.Controller;
 
-public class SeatingplanController
+public class SeatingPlanController
 {
-    
+
 }
