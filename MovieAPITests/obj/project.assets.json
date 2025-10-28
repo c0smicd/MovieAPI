@@ -7867,19 +7867,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\lukas\\.nuget\\packages\\": {}
+    "/Users/lukasmuller/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\lukas\\RiderProjects\\MovieAPI\\MovieAPITests\\MovieAPITests.csproj",
+      "projectUniqueName": "/Users/lukasmuller/RiderProjects/Compeso-MovieAPI/MovieAPITests/MovieAPITests.csproj",
       "projectName": "MovieAPITests",
-      "projectPath": "C:\\Users\\lukas\\RiderProjects\\MovieAPI\\MovieAPITests\\MovieAPITests.csproj",
-      "packagesPath": "C:\\Users\\lukas\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\lukas\\RiderProjects\\MovieAPI\\MovieAPITests\\obj\\",
+      "projectPath": "/Users/lukasmuller/RiderProjects/Compeso-MovieAPI/MovieAPITests/MovieAPITests.csproj",
+      "packagesPath": "/Users/lukasmuller/.nuget/packages/",
+      "outputPath": "/Users/lukasmuller/RiderProjects/Compeso-MovieAPI/MovieAPITests/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\lukas\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/Users/lukasmuller/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -7891,8 +7891,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\lukas\\RiderProjects\\MovieAPI\\MovieAPI\\MovieAPI.csproj": {
-              "projectPath": "C:\\Users\\lukas\\RiderProjects\\MovieAPI\\MovieAPI\\MovieAPI.csproj"
+            "/Users/lukasmuller/RiderProjects/Compeso-MovieAPI/MovieAPI/MovieAPI.csproj": {
+              "projectPath": "/Users/lukasmuller/RiderProjects/Compeso-MovieAPI/MovieAPI/MovieAPI.csproj"
             }
           }
         }
@@ -7956,7 +7956,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.121/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.121/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

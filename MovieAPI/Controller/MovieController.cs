@@ -189,6 +189,12 @@ public class MovieController : ControllerBase
         [FromBody] MovieDToCreate movieDto,
         [FromHeader(Name = "Idempotency-Key")] string? idempotencyKey = null)
     {
+
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+        
         if (!string.IsNullOrEmpty(idempotencyKey))
         {
             var existingRecord = await _context.IdempotencyRecords
