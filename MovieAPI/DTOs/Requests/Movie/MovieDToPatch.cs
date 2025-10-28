@@ -1,4 +1,4 @@
-namespace MovieAPI.DTOs.Requests;
+namespace MovieAPI.DTOs.Requests.Movie;
 
 public class MovieDToPatch
 {
@@ -13,5 +13,4 @@ public class MovieDToPatch
 
     // Related entity references by ID
     public List<int>? AuditoriumIds { get; set; }
-
 }

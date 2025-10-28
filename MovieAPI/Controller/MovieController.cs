@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using MovieAPI.Constants;
 using MovieAPI.Data;
-using MovieAPI.DTOs.Requests;
+using MovieAPI.DTOs.Requests.Movie;
 using MovieAPI.DTOs.Response;
 using MovieAPI.Models;
 
@@ -88,7 +88,6 @@ public class MovieController : ControllerBase
     /// </summary>
     /// <param name="auditoriumId">Id of the auditorium</param>
     /// <returns></returns>
-
     [HttpGet("by-auditorium/{auditoriumId:int}")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<MovieDToResponse>))]
     [ProducesResponseType(404)]
