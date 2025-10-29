@@ -29,8 +29,6 @@ public class MovieControllerTest
         _fakeCache = A.Fake<IMemoryCache>();
 
         _controller = new MovieController(_fakeContext, _fakeLogger, _fakeCache);
-
-
     }
 
 
@@ -102,9 +100,8 @@ public class MovieControllerTest
     [Fact]
     public async Task GetMovies_ReturnsMoviesOnCorrectPage()
     {
-
         // Arrange
-        _fakeContext.Movies.AddRange(new []
+        _fakeContext.Movies.AddRange(new[]
         {
             new Movie { Id = 1, Title = "Movie 1", Genre = "Genre 1", Rating = 7.0, PosterUrl = "poster1" },
             new Movie { Id = 2, Title = "Movie 2", Genre = "Genre 2", Rating = 8.0, PosterUrl = "poster2" },
@@ -128,7 +125,6 @@ public class MovieControllerTest
     [Fact]
     public async Task GetMovies_ReturnsMoviesByAuditoriumId()
     {
-
         // Arrange
 
         // Seed context with seating plan and auditorium
@@ -184,7 +180,7 @@ public class MovieControllerTest
         await _fakeContext.SaveChangesAsync();
 
         // Act
-        var result = await _controller.GetMovies(auditoriumId: 1);
+        var result = await _controller.GetMoviesByAuditorium(auditoriumId: 1);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
@@ -192,8 +188,5 @@ public class MovieControllerTest
         Assert.Equal(2, returnedMovies.Count);
         Assert.Contains(returnedMovies, m => m.Title == "Movie A");
         Assert.Contains(returnedMovies, m => m.Title == "Movie B");
-
-
-
     }
 }

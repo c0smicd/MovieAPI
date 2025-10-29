@@ -89,7 +89,7 @@ public class MovieController : BaseController
     [ProducesResponseType(200, Type = typeof(IEnumerable<MovieDToResponse>))]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
-    public async Task<ActionResult<IEnumerable<MovieDToResponse>>> GetMovies(int auditoriumId)
+    public async Task<ActionResult<IEnumerable<MovieDToResponse>>> GetMoviesByAuditorium(int auditoriumId)
     {
         if (_cache.TryGetValue(CacheKeys.MoviesByAuditorium(auditoriumId), out MovieDToResponse[]? cachedFilms))
         {

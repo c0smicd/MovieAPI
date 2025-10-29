@@ -11,19 +11,15 @@ namespace MovieAPI.Controller;
 
 [ApiController]
 [Route("api/v1/auditoriums")]
-public class AuditoriumController : ControllerBase
+public class AuditoriumController : BaseController
 {
     private readonly IMemoryCache _cache;
-    private readonly AppDbContext _context;
-    private readonly ILogger<MovieController> _logger;
 
     public AuditoriumController(
         AppDbContext context,
         ILogger<MovieController> logger,
-        IMemoryCache cache)
+        IMemoryCache cache) : base(context, logger)
     {
-        _context = context;
-        _logger = logger;
         _cache = cache;
     }
 
@@ -39,11 +35,11 @@ public class AuditoriumController : ControllerBase
             // Check cache first
             if (_cache.TryGetValue(id, out AuditoriumDToResponse? cachedAuditorium))
             {
-                _logger.LogInformation("Auditorium {Id} retrieved from cache.", id);
+                Logger.LogInformation("Auditorium {Id} retrieved from cache.", id);
                 return Ok(cachedAuditorium);
             }
 
-            var auditorium = await _context.Auditoriums
+            var auditorium = await Context.Auditoriums
                 .Where(a => a.Id == id)
                 .Select(a => new AuditoriumDToResponse
                 {
@@ -69,13 +65,13 @@ public class AuditoriumController : ControllerBase
 
             // Store in cache
             _cache.Set(id, auditorium, TimeSpan.FromMinutes(10));
-            _logger.LogInformation("Auditorium {Id} retrieved from database and cached.", id);
+            Logger.LogInformation("Auditorium {Id} retrieved from database and cached.", id);
 
             return Ok(auditorium);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error retrieving auditorium {Id}.", id);
+            Logger.LogError(ex, "Error retrieving auditorium {Id}.", id);
             return StatusCode(500, "Internal server error");
         }
     }
@@ -92,18 +88,18 @@ public class AuditoriumController : ControllerBase
     {
         if (!ModelState.IsValid)
         {
-            _logger.LogError("Invalid model state for creating auditorium.");
+            Logger.LogError("Invalid model state for creating auditorium.");
             return BadRequest(ModelState);
         }
 
         if (!string.IsNullOrEmpty(idempotencyKey))
         {
-            var existingRecord = await _context.IdempotencyRecords
+            var existingRecord = await Context.IdempotencyRecords
                 .FirstOrDefaultAsync(r => r.IdempotencyKey == idempotencyKey && r.ExpiresAt > DateTime.UtcNow);
 
             if (existingRecord != null)
             {
-                _logger.LogWarning("Idempotent request with key '{key}' found, returning cached response",
+                Logger.LogWarning("Idempotent request with key '{key}' found, returning cached response",
                     idempotencyKey); // Log Information
 
                 var cachedResponse = JsonSerializer.Deserialize<MovieDToResponse>(existingRecord.ResponseBody);
@@ -114,13 +110,13 @@ public class AuditoriumController : ControllerBase
 
         try
         {
-            var seatingPlan = await _context.SeatingPlans
+            var seatingPlan = await Context.SeatingPlans
                 .Where(s => s.Id == auditoriumDto.SeatingPlanId)
                 .FirstOrDefaultAsync();
 
             if (seatingPlan == null)
             {
-                _logger.LogWarning("Seating plan with ID {SeatingPlanId} not found.", auditoriumDto.SeatingPlanId);
+                Logger.LogWarning("Seating plan with ID {SeatingPlanId} not found.", auditoriumDto.SeatingPlanId);
 
                 return BadRequest($"Seating plan with ID {auditoriumDto.SeatingPlanId} not found.");
             }
@@ -132,8 +128,8 @@ public class AuditoriumController : ControllerBase
                 SeatingPlan = seatingPlan
             };
 
-            _context.Auditoriums.Add(auditorium);
-            await _context.SaveChangesAsync();
+            Context.Auditoriums.Add(auditorium);
+            await Context.SaveChangesAsync();
 
             var responseDto = new AuditoriumDToResponse
             {
@@ -162,17 +158,17 @@ public class AuditoriumController : ControllerBase
                     ExpiresAt = DateTime.UtcNow.AddMinutes(5)
                 };
 
-                _context.IdempotencyRecords.Add(idempotencyRecord);
+                Context.IdempotencyRecords.Add(idempotencyRecord);
 
-                await _context.SaveChangesAsync();
+                await Context.SaveChangesAsync();
             }
 
-            _logger.LogInformation("Created auditorium with ID {id}.", auditorium.Id);
+            Logger.LogInformation("Created auditorium with ID {id}.", auditorium.Id);
             return CreatedAtAction(nameof(GetAuditoriumById), new { id = auditorium.Id }, responseDto);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error creating auditorium.");
+            Logger.LogError(ex, "Error creating auditorium.");
             return StatusCode(500, "Internal server error");
         }
     }
