@@ -1,5 +1,16 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace MovieAPI.DTOs.Requests.Auditorium;
 
 public class AuditoriumDToCreate
 {
+    [Required(ErrorMessage = "Id is required.")]
+    public int Id { get; set; }
+
+    [MaxLength(100, ErrorMessage = "Auditorium name cannot exceed 100 characters.")]
+    public string AuditoriumName { get; set; } = "";
+
+    [Required(ErrorMessage = "SeatingPlanIds are required.")]
+    [MinLength(1, ErrorMessage = "At least one SeatingPlanId must be provided.")]
+    public int SeatingPlanId { get; set; }
 }

@@ -10,20 +10,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9b893aa8-c41e-449d-b6da-fd7c8c444d76" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/MovieAPI/DTOs/Requests/Auditorium/AuditoriumDToCreate.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MovieAPI/DTOs/Requests/Auditorium/AuditoriumDToDelete.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MovieAPI/DTOs/Requests/Auditorium/AuditoriumDToPatch.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MovieAPI/DTOs/Requests/Movie/MovieDToDelete.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MovieAPI/DTOs/Requests/SeatingPlan/SeatingPlanDToCreate.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MovieAPI/DTOs/Requests/SeatingPlan/SeatingPlanDToDelete.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MovieAPI/DTOs/Requests/SeatingPlan/SeatingPlanDToPatch.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MovieAPI/DTOs/Response/AuditoriumDToResponse.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/MovieAPI/DTOs/Response/SeatingPlanDToResponse.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MovieAPI/Controller/BaseController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MovieAPI/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MovieAPI/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MovieAPI/Controller/AuditoriumController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MovieAPI/Controller/AuditoriumController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MovieAPI/Controller/MovieController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MovieAPI/Controller/MovieController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MovieAPI/DTOs/Requests/MovieDToCreate.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MovieAPI/DTOs/Requests/Movie/MovieDToCreate.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MovieAPI/DTOs/Requests/MovieDToPatch.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MovieAPI/DTOs/Requests/Movie/MovieDToPatch.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MovieAPI/DTOs/Requests/Auditorium/AuditoriumDToCreate.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MovieAPI/DTOs/Requests/Auditorium/AuditoriumDToCreate.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MovieAPI/DTOs/Requests/Auditorium/AuditoriumDToDelete.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MovieAPI/DTOs/Requests/Movie/MovieDToDelete.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MovieAPI/DTOs/Requests/SeatingPlan/SeatingPlanDToDelete.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MovieAPI/DTOs/Response/AuditoriumDToResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MovieAPI/DTOs/Response/AuditoriumDToResponse.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MovieAPI/DTOs/Response/SeatingPlanDToResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MovieAPI/DTOs/Response/SeatingPlanDToResponse.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MovieAPI/Models/Auditorium.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MovieAPI/Models/Auditorium.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MovieAPI/Models/SeatingPlan.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MovieAPI/Models/SeatingPlan.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MovieAPITests/obj/Debug/net8.0/MovieAPITests.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/MovieAPITests/obj/Debug/net8.0/MovieAPITests.AssemblyInfo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MovieAPITests/obj/Debug/net8.0/MovieAPITests.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/MovieAPITests/obj/Debug/net8.0/MovieAPITests.AssemblyInfoInputs.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MovieAPITests/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/MovieAPITests/obj/rider.project.model.nuget.info" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,18 +80,14 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/96a4cc66aa48dda8a9d8be8febec4a769fc143f7a86dd53ecdebfb9c3177d/ControllerBase.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/eabafafbeed23dab31f6a8184bdb1fe5a4c2237f39efe53885612b2ccdd3cd/MemoryCacheExtensions.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/MovieAPI/Constants/CacheKeys.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/lukas/RiderProjects/MovieAPI/MovieAPI/Controller/AuditoriumController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/MovieAPI/Controller/AuditoriumController.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/lukas/RiderProjects/MovieAPI/MovieAPI/Controller/MovieController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/MovieAPI/Controller/BaseController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/MovieAPI/Controller/MovieController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/MovieAPI/Controller/SeatingPlanController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/MovieAPI/DTOs/Requests/Auditorium/AuditoriumDToCreate.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/MovieAPI/DTOs/Requests/Auditorium/AuditoriumDToDelete.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/MovieAPI/DTOs/Requests/Auditorium/AuditoriumDToPatch.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/MovieAPI/DTOs/Requests/Movie/MovieDToCreate.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/MovieAPI/DTOs/Requests/Movie/MovieDToDelete.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/MovieAPI/DTOs/Requests/SeatingPlan/SeatingPlanDToCreate.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/MovieAPI/DTOs/Requests/SeatingPlan/SeatingPlanDToDelete.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/MovieAPI/DTOs/Requests/SeatingPlan/SeatingPlanDToPatch.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/MovieAPI/DTOs/Response/AuditoriumDToResponse.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/MovieAPI/DTOs/Response/MovieDToResponse.cs" root0="FORCE_HIGHLIGHTING" />
@@ -100,7 +97,6 @@
     <setting file="file://$PROJECT_DIR$/MovieAPI/Models/IdempotencyRecord.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/MovieAPI/Models/Movie.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/MovieAPI/Models/SeatingPlan.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/lukas/RiderProjects/MovieAPI/MovieAPITests/obj/Debug/net8.0/MovieAPITests.AssemblyInfo.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="HttpClientEndpointsTabState">
     <option name="cachedRequestData" value="&lt;CachedHttpClientTabRequests&gt;&#10;  &lt;entry key=&quot;e435bce88b54299993d8f997d1c58eeef0d60e0e&quot; value=&quot;###&amp;#10;GET http://localhost:5165/api/v1/films&quot; /&gt;&#10;&lt;/CachedHttpClientTabRequests&gt;" />
@@ -249,7 +245,8 @@
       <workItem from="1761512082896" duration="358000" />
       <workItem from="1761512463142" duration="297000" />
       <workItem from="1761512778372" duration="2975000" />
-      <workItem from="1761681476492" duration="7633000" />
+      <workItem from="1761681476492" duration="7726000" />
+      <workItem from="1761735647840" duration="5850000" />
     </task>
     <task id="LOCAL-00001">
       <option name="closed" value="true" />
@@ -259,7 +256,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761684600118</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Added skeleton for AuditoriumController and DTos for Auditorium, Movie and SeatingPlan">
+      <option name="closed" value="true" />
+      <created>1761694880140</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1761694880140</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -280,6 +285,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+    <MESSAGE value="Added skeleton for AuditoriumController and DTos for Auditorium, Movie and SeatingPlan" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added skeleton for AuditoriumController and DTos for Auditorium, Movie and SeatingPlan" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
