@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using MovieAPI.Constants;
 using MovieAPI.Data;
 using MovieAPI.DTOs.Requests.Movie;
 using MovieAPI.DTOs.Response;
@@ -65,6 +64,7 @@ public class MovieController : BaseController
             }
 
             Cache.Set(CacheKeys.MoviesByPage(page, pageSize), films, TimeSpan.FromMinutes(10)); // Cache for 10 minutes
+            RegisterPaginationKey(CacheKeys.MoviesByPage(page, pageSize));
 
             Logger.LogInformation("'{films.length}' films from page '{page}' where retrieved", films.Length,
                 page); // Log information 
@@ -247,9 +247,10 @@ public class MovieController : BaseController
                 await CreateIdempotencyRecord(idempotencyKey, HttpContext.Request.Path, 201, responseDto);
             }
             
-            // TODO: Highly inefficient cache clearing strategy. The only problem is Pagination, maybe storing the keys and only clearing those would be a better approach
-            // Clear every cache related to movies upon creation, because cannot distinguish what data is stale, caused by Pagination
-            if (Cache is MemoryCache concreteMemoryCache) concreteMemoryCache.Clear();
+
+            // Clear every pagination cache entry as data has changed
+            foreach (var paginationEntries in GetPaginationKeys())
+                Cache.Remove(paginationEntries);
 
             Logger.LogInformation("MovieId '{id}' created successfully", movie.Id); // Log Information
             return CreatedAtAction(nameof(GetMovie), new { id = movie.Id }, responseDto); // Return 201
@@ -323,6 +324,12 @@ public class MovieController : BaseController
     {
         try
         {
+            var auditoriums = await Context.Movies
+                .Where(m => m.Id == id)
+                .SelectMany(m => m.Auditoriums)
+                .Select(a => a.Id)
+                .ToListAsync();
+
             var deletedRows = await Context.Movies
                 .Where(m => m.Id == id)
                 .ExecuteDeleteAsync();
@@ -332,6 +339,20 @@ public class MovieController : BaseController
                 Logger.LogWarning("MovieId '{id}' not found", id);
                 return NotFound(new { message = "Movie not found,  therefor nothing to delete" });
             }
+
+            // Clear cache routine
+
+            Cache.Remove(CacheKeys.MovieById(id));
+            // Clear every pagination cache entry as data has changed
+            // Yea I know, code duplication, but it's late and I don't want to refactor right now
+            foreach (var paginationEntries in GetPaginationKeys())
+                Cache.Remove(paginationEntries);
+
+
+            // Invalidate Cache for all auditoriums related to this movie
+            foreach (var auditoriumId in auditoriums)
+                Cache.Remove(CacheKeys.AuditoriumById(auditoriumId));
+
 
             Logger.LogInformation("MovieId '{id}' successfully deleted", id);
             return Ok(new { message = "Movie deleted successfully" });

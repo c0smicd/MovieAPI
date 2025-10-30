@@ -63,7 +63,7 @@ public class AuditoriumController : BaseController
                 .FirstOrDefaultAsync();
 
             // Store in cache
-            Cache.Set(id, auditorium, TimeSpan.FromMinutes(10));
+            Cache.Set(CacheKeys.AuditoriumById(id), auditorium, TimeSpan.FromMinutes(10));
             Logger.LogInformation("Auditorium {Id} retrieved from database and cached.", id);
 
             return Ok(auditorium);

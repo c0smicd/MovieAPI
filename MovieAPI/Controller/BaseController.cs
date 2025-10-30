@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,9 +10,21 @@ namespace MovieAPI.Controller;
 
 public abstract class BaseController : ControllerBase
 {
+
+    protected static class CacheKeys
+    {
+        public static string MovieById(int id) => $"movie_{id}";
+        public static string MoviesByPage(int page, int pageSize) => $"movies_page_{page}_size_{pageSize}";
+        public static string MoviesByAuditorium(int auditoriumId) => $"by_auditorium_{auditoriumId}";
+        public static string AuditoriumById(int id) => $"auditorium_{id}";
+    }
+
+
     protected readonly AppDbContext Context;
     protected readonly ILogger Logger;
     protected readonly IMemoryCache Cache;
+
+    private readonly HashSet<string> _paginationKeys = new();
 
     protected BaseController(AppDbContext context, ILogger logger, IMemoryCache cache)
     {
@@ -64,4 +77,15 @@ public abstract class BaseController : ControllerBase
         await Context.SaveChangesAsync();
     }
     //TODO handle cache entries here
+    //Question, should I handle caching here or in the calling controllers?
+    protected void RegisterPaginationKey(string key)
+    {
+        lock(_paginationKeys) _paginationKeys.Add(key);
+
+    }
+
+    protected List<string> GetPaginationKeys()
+    {
+        lock(_paginationKeys) return _paginationKeys.ToList();
+    }
 }
