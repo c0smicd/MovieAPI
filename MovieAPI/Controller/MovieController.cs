@@ -83,7 +83,7 @@ public class MovieController : BaseController
     /// <summary>
     ///   Get all movies by auditorium id
     /// </summary>
-    /// <param name="auditoriumId">Id of the auditorium</param>
+    /// <param name="auditoriumId">ID of the auditorium</param>
     /// <returns></returns>
     [HttpGet("by-auditorium/{auditoriumId:int}")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<MovieDToResponse>))]
@@ -246,21 +246,10 @@ public class MovieController : BaseController
 
             if (!string.IsNullOrEmpty(idempotencyKey))
             {
-                var idempotencyRecord = new IdempotencyRecord
-                {
-                    IdempotencyKey = idempotencyKey,
-                    RequestPath = HttpContext.Request.Path,
-                    StatusCode = 201,
-                    ResponseBody = JsonSerializer.Serialize(responseDto),
-                    CreatedAt = DateTime.UtcNow,
-                    ExpiresAt = DateTime.UtcNow.AddMinutes(5)
-                };
-
-                Context.IdempotencyRecords.Add(idempotencyRecord);
-
-                await Context.SaveChangesAsync();
+                await CreateIdempotencyRecord(idempotencyKey, HttpContext.Request.Path, 201, responseDto);
             }
-
+            
+            // TODO: Highly inefficient cache clearing strategy. The only problem is Pagination, maybe storing the keys and only clearing those would be a better approach
             // Clear every cache related to movies upon creation, because cannot distinguish what data is stale, caused by Pagination
             if (_cache is MemoryCache concreteMemoryCache) concreteMemoryCache.Clear();
 

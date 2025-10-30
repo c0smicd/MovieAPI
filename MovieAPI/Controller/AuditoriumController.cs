@@ -38,7 +38,7 @@ public class AuditoriumController : BaseController
                 Logger.LogInformation("Auditorium {Id} retrieved from cache.", id);
                 return Ok(cachedAuditorium);
             }
-
+            // Get the auditorium with SeatingPlan and if there are movies associated with it
             var auditorium = await Context.Auditoriums
                 .Where(a => a.Id == id)
                 .Select(a => new AuditoriumDToResponse
@@ -92,24 +92,14 @@ public class AuditoriumController : BaseController
             return BadRequest(ModelState);
         }
 
-        if (!string.IsNullOrEmpty(idempotencyKey))
-        {
-            var existingRecord = await Context.IdempotencyRecords
-                .FirstOrDefaultAsync(r => r.IdempotencyKey == idempotencyKey && r.ExpiresAt > DateTime.UtcNow);
-
-            if (existingRecord != null)
-            {
-                Logger.LogWarning("Idempotent request with key '{key}' found, returning cached response",
-                    idempotencyKey); // Log Information
-
-                var cachedResponse = JsonSerializer.Deserialize<MovieDToResponse>(existingRecord.ResponseBody);
-
-                return StatusCode(existingRecord.StatusCode, cachedResponse);
-            }
-        }
+        // Check for idempotency
+        var idempotentResponse = await CheckIdempotencyAsync<AuditoriumDToResponse>(idempotencyKey);
+        if (idempotentResponse != null)
+            return BadRequest(idempotentResponse);
 
         try
         {
+            // Does the seating plan exist?
             var seatingPlan = await Context.SeatingPlans
                 .Where(s => s.Id == auditoriumDto.SeatingPlanId)
                 .FirstOrDefaultAsync();
@@ -120,7 +110,7 @@ public class AuditoriumController : BaseController
 
                 return BadRequest($"Seating plan with ID {auditoriumDto.SeatingPlanId} not found.");
             }
-
+            // If so create the auditorium accordingly
             var auditorium = new Auditorium
             {
                 Id = auditoriumDto.Id,
@@ -130,7 +120,8 @@ public class AuditoriumController : BaseController
 
             Context.Auditoriums.Add(auditorium);
             await Context.SaveChangesAsync();
-
+            
+            // Prepare response DTO
             var responseDto = new AuditoriumDToResponse
             {
                 Id = auditorium.Id,
@@ -145,22 +136,9 @@ public class AuditoriumController : BaseController
             };
 
             // Store idempotency record
-
             if (!string.IsNullOrEmpty(idempotencyKey))
             {
-                var idempotencyRecord = new IdempotencyRecord
-                {
-                    IdempotencyKey = idempotencyKey,
-                    RequestPath = HttpContext.Request.Path,
-                    StatusCode = 201,
-                    ResponseBody = JsonSerializer.Serialize(responseDto),
-                    CreatedAt = DateTime.UtcNow,
-                    ExpiresAt = DateTime.UtcNow.AddMinutes(5)
-                };
-
-                Context.IdempotencyRecords.Add(idempotencyRecord);
-
-                await Context.SaveChangesAsync();
+                await CreateIdempotencyRecord(idempotencyKey, HttpContext.Request.Path, 201, responseDto);
             }
 
             Logger.LogInformation("Created auditorium with ID {id}.", auditorium.Id);
