@@ -13,14 +13,13 @@ namespace MovieAPI.Controller;
 [Route("api/v1/auditoriums")]
 public class AuditoriumController : BaseController
 {
-    private readonly IMemoryCache _cache;
 
     public AuditoriumController(
         AppDbContext context,
         ILogger<MovieController> logger,
-        IMemoryCache cache) : base(context, logger)
+        IMemoryCache cache) : base(context, logger, cache)
     {
-        _cache = cache;
+        
     }
 
     // ---------------------------------------------- GET METHODS ----------------------------------------------
@@ -33,7 +32,7 @@ public class AuditoriumController : BaseController
         try
         {
             // Check cache first
-            if (_cache.TryGetValue(id, out AuditoriumDToResponse? cachedAuditorium))
+            if (Cache.TryGetValue(id, out AuditoriumDToResponse? cachedAuditorium))
             {
                 Logger.LogInformation("Auditorium {Id} retrieved from cache.", id);
                 return Ok(cachedAuditorium);
@@ -64,7 +63,7 @@ public class AuditoriumController : BaseController
                 .FirstOrDefaultAsync();
 
             // Store in cache
-            _cache.Set(id, auditorium, TimeSpan.FromMinutes(10));
+            Cache.Set(id, auditorium, TimeSpan.FromMinutes(10));
             Logger.LogInformation("Auditorium {Id} retrieved from database and cached.", id);
 
             return Ok(auditorium);

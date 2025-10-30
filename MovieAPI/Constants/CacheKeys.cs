@@ -1,6 +1,6 @@
 ﻿namespace MovieAPI.Constants;
 
-public class CacheKeys
+public static class CacheKeys
 {
     public static string MovieById(int id) => $"movie_{id}";
     public static string MoviesByPage(int page, int pageSize) => $"movies_page_{page}_size_{pageSize}";

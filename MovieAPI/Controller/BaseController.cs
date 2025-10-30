@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using MovieAPI.Data;
 using MovieAPI.Models;
 
@@ -10,11 +11,13 @@ public abstract class BaseController : ControllerBase
 {
     protected readonly AppDbContext Context;
     protected readonly ILogger Logger;
+    protected readonly IMemoryCache Cache;
 
-    protected BaseController(AppDbContext context, ILogger logger)
+    protected BaseController(AppDbContext context, ILogger logger, IMemoryCache cache)
     {
         Context = context;
         Logger = logger;
+        Cache = cache;
     }
     
     /// <summary>
@@ -60,4 +63,5 @@ public abstract class BaseController : ControllerBase
         Context.IdempotencyRecords.Add(idempotencyRecord);
         await Context.SaveChangesAsync();
     }
+    //TODO handle cache entries here
 }

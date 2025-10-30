@@ -14,13 +14,11 @@ namespace MovieAPI.Controller;
 [Route("api/v1/films")]
 public class MovieController : BaseController
 {
-    private readonly IMemoryCache _cache;
-
-
+    
     public MovieController(AppDbContext context, ILogger<MovieController> logger, IMemoryCache cache) : base(context,
-        logger)
+        logger, cache)
     {
-        _cache = cache;
+        
     }
 
     // ---------------------------------------------- GET METHODS ----------------------------------------------
@@ -38,7 +36,7 @@ public class MovieController : BaseController
     [ProducesResponseType(500)]
     public async Task<ActionResult<IEnumerable<MovieDToResponse>>> GetMovies(int page = 1, int pageSize = 10)
     {
-        if (_cache.TryGetValue(CacheKeys.MoviesByPage(page, pageSize), out MovieDToResponse[]? cachedFilms))
+        if (Cache.TryGetValue(CacheKeys.MoviesByPage(page, pageSize), out MovieDToResponse[]? cachedFilms))
         {
             Logger.LogInformation("Returning cached movies for page {page}", page);
             return Ok(cachedFilms);
@@ -66,7 +64,7 @@ public class MovieController : BaseController
                 return NotFound(new { message = "No films found for the specified page" }); // Return 404
             }
 
-            _cache.Set(CacheKeys.MoviesByPage(page, pageSize), films, TimeSpan.FromMinutes(10)); // Cache for 10 minutes
+            Cache.Set(CacheKeys.MoviesByPage(page, pageSize), films, TimeSpan.FromMinutes(10)); // Cache for 10 minutes
 
             Logger.LogInformation("'{films.length}' films from page '{page}' where retrieved", films.Length,
                 page); // Log information 
@@ -91,7 +89,7 @@ public class MovieController : BaseController
     [ProducesResponseType(500)]
     public async Task<ActionResult<IEnumerable<MovieDToResponse>>> GetMoviesByAuditorium(int auditoriumId)
     {
-        if (_cache.TryGetValue(CacheKeys.MoviesByAuditorium(auditoriumId), out MovieDToResponse[]? cachedFilms))
+        if (Cache.TryGetValue(CacheKeys.MoviesByAuditorium(auditoriumId), out MovieDToResponse[]? cachedFilms))
         {
             Logger.LogInformation("Returning cached movies for auditoriumId {auditoriumId}", auditoriumId);
             return Ok(cachedFilms);
@@ -117,7 +115,7 @@ public class MovieController : BaseController
                 return NotFound(new { message = "No films found for the specified auditorium" }); // Return 404
             }
 
-            _cache.Set(CacheKeys.MoviesByAuditorium(auditoriumId), films,
+            Cache.Set(CacheKeys.MoviesByAuditorium(auditoriumId), films,
                 TimeSpan.FromMinutes(5)); // Cache for 5 minutes
 
             Logger.LogInformation("'{films.length}' films for auditoriumId '{auditoriumId}' were retrieved",
@@ -146,7 +144,7 @@ public class MovieController : BaseController
     [ProducesResponseType(500)]
     public async Task<ActionResult<MovieDToResponse>> GetMovie(int id)
     {
-        if (_cache.TryGetValue(CacheKeys.MovieById(id), out MovieDToResponse? cachedMovie))
+        if (Cache.TryGetValue(CacheKeys.MovieById(id), out MovieDToResponse? cachedMovie))
         {
             Logger.LogInformation("Returning cached movie for MovieId '{id}'", id); // Log Information
             return Ok(cachedMovie);
@@ -172,7 +170,7 @@ public class MovieController : BaseController
                 return NotFound(new { message = "Film not found" }); // Return 404
             }
 
-            _cache.Set(CacheKeys.MovieById(id), movie, TimeSpan.FromMinutes(30)); // Cache for 30 minutes
+            Cache.Set(CacheKeys.MovieById(id), movie, TimeSpan.FromMinutes(30)); // Cache for 30 minutes
 
             // Movie with id found
             Logger.LogInformation("MovieId '{id}' retrieved successfully", id); // Log Information
@@ -251,7 +249,7 @@ public class MovieController : BaseController
             
             // TODO: Highly inefficient cache clearing strategy. The only problem is Pagination, maybe storing the keys and only clearing those would be a better approach
             // Clear every cache related to movies upon creation, because cannot distinguish what data is stale, caused by Pagination
-            if (_cache is MemoryCache concreteMemoryCache) concreteMemoryCache.Clear();
+            if (Cache is MemoryCache concreteMemoryCache) concreteMemoryCache.Clear();
 
             Logger.LogInformation("MovieId '{id}' created successfully", movie.Id); // Log Information
             return CreatedAtAction(nameof(GetMovie), new { id = movie.Id }, responseDto); // Return 201
@@ -300,11 +298,11 @@ public class MovieController : BaseController
 
             await Context.SaveChangesAsync();
 
-            _cache.Remove(CacheKeys.MovieById(id)); // Invalidate cache for this movie
+            Cache.Remove(CacheKeys.MovieById(id)); // Invalidate cache for this movie
 
             // Invalidate Cache for all auditoriums related to this movie
             foreach (var auditoriumId in currentAuditoriumIds)
-                _cache.Remove(CacheKeys.MoviesByAuditorium(auditoriumId));
+                Cache.Remove(CacheKeys.MoviesByAuditorium(auditoriumId));
 
             Logger.LogInformation("MovieId '{id}' updated successfully", id); // Log Information
             return NoContent(); // Return 204
