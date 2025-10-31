@@ -98,7 +98,7 @@ public class MovieControllerTest
 
 
     [Fact]
-    public async Task GetMovies_ReturnsMoviesOnCorrectPage()
+    public async Task GetMovies_ReturnsOk_OnCorrectPage()
     {
         // Arrange
         _fakeContext.Movies.AddRange(new[]
@@ -123,7 +123,7 @@ public class MovieControllerTest
     }
 
     [Fact]
-    public async Task GetMovies_ReturnsMoviesByAuditoriumId()
+    public async Task GetMovies_ReturnsOk_MoviesByAuditoriumId()
     {
         // Arrange
 
