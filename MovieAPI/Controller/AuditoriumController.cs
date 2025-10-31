@@ -149,4 +149,59 @@ public class AuditoriumController : BaseController
             return StatusCode(500, "Internal server error");
         }
     }
+
+    // ---------------------------------------------- UPDATE/PATCH ----------------------------------------------
+
+    [HttpPatch("{id:int}")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
+    public async Task<IActionResult> UpdateAuditorium(int id, [FromBody] AuditoriumDToPatch auditoriumDto)
+    {
+        if (!ModelState.IsValid)
+        {
+            Logger.LogError("Invalid model state for updating auditorium {Id}.", id);
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            var auditorium = await Context.Auditoriums.FindAsync(id);
+            if (auditorium == null)
+            {
+                Logger.LogWarning("Auditorium with ID {Id} not found for update.", id);
+                return NotFound();
+            }
+
+            auditorium.AuditoriumName = auditoriumDto.AuditoriumName ?? auditorium.AuditoriumName;
+
+            // Check if seating plan exists
+            if (auditoriumDto.SeatingPlanId.HasValue)
+            {
+                var seatingPlan = await Context.SeatingPlans
+                    .Where(s => s.Id == auditoriumDto.SeatingPlanId.Value)
+                    .FirstOrDefaultAsync();
+
+                if (seatingPlan == null)
+                {
+                    Logger.LogWarning("Seating plan with ID {SeatingPlanId} not found for auditorium update.", auditoriumDto.SeatingPlanId.Value);
+                    return BadRequest($"Seating plan with ID {auditoriumDto.SeatingPlanId.Value} not found.");
+                }
+
+                auditorium.SeatingPlan = seatingPlan;
+            }
+
+            Context.Auditoriums.Update(auditorium);
+            await Context.SaveChangesAsync();
+
+            Logger.LogInformation("Updated auditorium with ID {Id}.", id);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error updating auditorium {Id}.", id);
+            return StatusCode(500, "Internal server error");
+        }
+    }
 }

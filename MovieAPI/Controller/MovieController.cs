@@ -187,6 +187,9 @@ public class MovieController : BaseController
     //---------------------------------------------- CREATE METHODS ------------------------------------------------
 
     [HttpPost]
+    [ProducesResponseType(200, Type = typeof(MovieDToResponse))]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
     public async Task<ActionResult<MovieDToResponse>> CreateMovie(
         [FromBody] MovieDToCreate movieDto,
         [FromHeader(Name = "Idempotency-Key")] string? idempotencyKey = null)
@@ -218,18 +221,29 @@ public class MovieController : BaseController
                 UpdatedAt = movieDto.UpdatedAt
             };
 
-            // Link Auditoriums
+            // Does there exist auditoriums to link?
             if (movieDto.AuditoriumIds is { Count: > 0 } auditoriumIds)
             {
+                var existingCount = await Context.Auditoriums
+                    .CountAsync(a => auditoriumIds.Contains(a.Id));
+
+                if (existingCount != auditoriumIds.Count)
+                {
+                    Logger.LogWarning("One or more AuditoriumIds provided do not exist");
+                    return NotFound(new { message = "One or more AuditoriumIds provided do not exist" });
+                }
+
+                // Link Auditoriums
                 var auditoriums = await Context.Auditoriums
-                    .Where(a => auditoriumIds.Contains(a.Id))
+                    .Where(a => movieDto.AuditoriumIds.Contains(a.Id))
                     .ToListAsync();
 
                 movie.Auditoriums = auditoriums;
+
+                Context.Movies.Add(movie);
+                await Context.SaveChangesAsync();
             }
 
-            Context.Movies.Add(movie);
-            await Context.SaveChangesAsync();
 
             var responseDto = new MovieDToResponse
             {
@@ -272,6 +286,12 @@ public class MovieController : BaseController
     [ProducesResponseType(500)]
     public async Task<IActionResult> UpdateMovie(int id, [FromBody] MovieDToPatch movieDto)
     {
+        if (!ModelState.IsValid)
+        {
+            Logger.LogError("Invalid model state for creating movie.");
+            return BadRequest(ModelState);
+        }
+
         try
         {
             var movie = await Context.Movies
@@ -284,8 +304,6 @@ public class MovieController : BaseController
                 return NotFound(new { message = "Film not found" }); // Return 404
             }
 
-            var currentAuditoriumIds = movie.Auditoriums.Select(a => a.Id).ToList();
-
             // Update fields if provided
             movie.Title = movieDto.Title ?? movie.Title;
             movie.Description = movieDto.Description ?? movie.Description;
@@ -297,11 +315,34 @@ public class MovieController : BaseController
             movie.PosterUrl = movieDto.PosterUrl ?? movie.PosterUrl;
             movie.UpdatedAt = DateTime.UtcNow;
 
+            // Check if the AuditoriumIds provided exist
+            if (movieDto.AuditoriumIds is { Count: > 0 })
+            {
+                var existsEveryAuditorium = await Context.Auditoriums
+                    .Select(a => a.Id)
+                    .AllAsync(a => movieDto.AuditoriumIds.Contains(a));
+
+                if(!existsEveryAuditorium)
+                {
+                    Logger.LogWarning("One or more AuditoriumIds provided do not exist");
+                    return NotFound(new { message = "One or more AuditoriumIds provided do not exist" });
+                }
+
+                // Update Auditorium associations
+                var auditoriums = await Context.Auditoriums
+                    .Where(a => movieDto.AuditoriumIds.Contains(a.Id))
+                    .ToListAsync();
+
+                movie.Auditoriums = auditoriums;
+            }
+
             await Context.SaveChangesAsync();
 
             Cache.Remove(CacheKeys.MovieById(id)); // Invalidate cache for this movie
 
             // Invalidate Cache for all auditoriums related to this movie
+            var currentAuditoriumIds = movie.Auditoriums.Select(a => a.Id).ToList();
+
             foreach (var auditoriumId in currentAuditoriumIds)
                 Cache.Remove(CacheKeys.MoviesByAuditorium(auditoriumId));
 
