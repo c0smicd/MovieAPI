@@ -35,9 +35,6 @@ public class Movie
     public DateTime? UpdatedAt { get; set; } 
     
     // Foreign Model Relations
-
-    [Required] public ICollection<Auditorium> Auditoriums { get; set; } = new List<Auditorium>();
-
-
+    public ICollection<Auditorium> Auditoriums { get; set; } = new List<Auditorium>();
 
 }

@@ -10,7 +10,7 @@ using MovieAPI.Models;
 
 namespace MovieAPITests;
 
-public class MovieControllerTest
+public class MovieControllerTest : IDisposable
 {
     private readonly AppDbContext _fakeContext;
     private readonly ILogger<MovieController> _fakeLogger;
@@ -20,7 +20,7 @@ public class MovieControllerTest
     public MovieControllerTest()
     {
         var options = new DbContextOptionsBuilder<AppDbContext>()
-            .UseInMemoryDatabase("MovieTestDb")
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
 
         _fakeContext = new AppDbContext(options);
@@ -188,5 +188,16 @@ public class MovieControllerTest
         Assert.Equal(2, returnedMovies.Count);
         Assert.Contains(returnedMovies, m => m.Title == "Movie A");
         Assert.Contains(returnedMovies, m => m.Title == "Movie B");
+    }
+
+    // Cleanup after each test
+    public void Dispose()
+    {
+        // Clear cache
+       if(_fakeCache is MemoryCache memoryCache)
+        {
+            memoryCache.Clear();
+        }
+
     }
 }

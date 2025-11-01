@@ -15,7 +15,7 @@ public class SeatingPlan
     public string Description { get; set; } = "";
 
     // Foreign Model Relations
-    [Required] public int? AuditoriumId { get; set; }
+    public int? AuditoriumId { get; set; }
 
-    [Required] public Auditorium? Auditorium { get; set; }
+    public Auditorium? Auditorium { get; set; }
 }
