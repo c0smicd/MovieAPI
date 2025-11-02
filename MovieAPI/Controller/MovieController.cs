@@ -200,10 +200,10 @@ public class MovieController : BaseController
             return BadRequest(ModelState);
         }
 
-        var cached = await CheckIdempotencyAsync<MovieDToResponse>(idempotencyKey);
+        var idempotentResponse = await CheckIdempotencyAsync<MovieDToResponse>(idempotencyKey);
 
-        if (cached != null)
-            return cached;
+        if (idempotentResponse != null)
+            return idempotentResponse;
 
         try
         {
@@ -243,6 +243,8 @@ public class MovieController : BaseController
             // Clear every pagination cache entry as data has changed
             foreach (var paginationEntries in GetPaginationKeys())
                 Cache.Remove(paginationEntries);
+
+            Cache.Remove(CacheKeys.MovieById(movie.Id));
 
             Logger.LogInformation("MovieId '{id}' created successfully", movie.Id); // Log Information
             return CreatedAtAction(nameof(GetMovie), new { id = movie.Id }, responseDto); // Return 201
@@ -296,6 +298,7 @@ public class MovieController : BaseController
 
             await Context.SaveChangesAsync();
 
+            // Invalidate Cache routine
             Cache.Remove(CacheKeys.MovieById(id)); // Invalidate cache for this movie
 
             // Invalidate Cache for all auditoriums related to this movie
@@ -351,6 +354,7 @@ public class MovieController : BaseController
             // Invalidate Cache for all auditoriums related to this movie
             foreach (var auditoriumId in auditoriums)
                 Cache.Remove(CacheKeys.AuditoriumById(auditoriumId));
+
 
 
             Logger.LogInformation("MovieId '{id}' successfully deleted", id);

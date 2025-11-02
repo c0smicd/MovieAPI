@@ -95,7 +95,7 @@ public class AuditoriumController : BaseController
         // Check for idempotency
         var idempotentResponse = await CheckIdempotencyAsync<AuditoriumDToResponse>(idempotencyKey);
         if (idempotentResponse != null)
-            return BadRequest(idempotentResponse);
+            return idempotentResponse;
 
         // Idempotency key not found, proceed with creation
         try
@@ -181,6 +181,10 @@ public class AuditoriumController : BaseController
 
             await Context.SaveChangesAsync();
 
+            // Invalidate Cache
+            Cache.Remove(CacheKeys.AuditoriumById(id));
+
+
             Logger.LogInformation("Updated auditorium with ID {Id}.", id);
             return NoContent();
         }
@@ -231,6 +235,8 @@ public class AuditoriumController : BaseController
                 return BadRequest($"Movie with ID {request.MovieId} is already associated with this auditorium.");
             }
 
+            Cache.Remove(CacheKeys.AuditoriumById(id));
+
             auditorium.Movies.Add(movie);
             await Context.SaveChangesAsync();
 
@@ -271,6 +277,8 @@ public class AuditoriumController : BaseController
 
             auditorium.Movies.Remove(movie);
             await Context.SaveChangesAsync();
+
+            Cache.Remove(CacheKeys.AuditoriumById(id));
 
             Logger.LogInformation("Removed movie {MovieId} from auditorium {Id}.", movieId, id);
             return NoContent();
@@ -317,6 +325,8 @@ public class AuditoriumController : BaseController
             auditorium.SeatingPlan = seatingPlan;
 
             await Context.SaveChangesAsync();
+
+            Cache.Remove(CacheKeys.AuditoriumById(id));
 
             Logger.LogInformation("Updated seating plan for auditorium {Id} to {SeatingPlanId}.", id, request.SeatingPlanId);
             return NoContent();
