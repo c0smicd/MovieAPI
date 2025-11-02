@@ -32,7 +32,7 @@ public class AuditoriumController : BaseController
         try
         {
             // Check cache first
-            if (Cache.TryGetValue(id, out AuditoriumDToResponse? cachedAuditorium))
+            if (Cache.TryGetValue(CacheKeys.AuditoriumById(id), out AuditoriumDToResponse? cachedAuditorium))
             {
                 Logger.LogInformation("Auditorium {Id} retrieved from cache.", id);
                 return Ok(cachedAuditorium);
@@ -47,6 +47,7 @@ public class AuditoriumController : BaseController
                     SeatingPlan = new SeatingPlanDToResponse
                     {
                         Id = a.SeatingPlan.Id,
+                        PlanName = a.SeatingPlan.PlanName,
                         LayoutJson = a.SeatingPlan.LayoutJson,
                         Description = a.SeatingPlan.Description
                     },
@@ -129,6 +130,7 @@ public class AuditoriumController : BaseController
                 SeatingPlan = new SeatingPlanDToResponse
                 {
                     Id = seatingPlan.Id,
+                    PlanName = seatingPlan.PlanName,
                     LayoutJson = seatingPlan.LayoutJson,
                     Description = seatingPlan.Description
                 },

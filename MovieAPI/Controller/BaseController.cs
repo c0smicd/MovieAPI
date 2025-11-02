@@ -17,6 +17,7 @@ public abstract class BaseController : ControllerBase
         public static string MoviesByPage(int page, int pageSize) => $"movies_page_{page}_size_{pageSize}";
         public static string MoviesByAuditorium(int auditoriumId) => $"by_auditorium_{auditoriumId}";
         public static string AuditoriumById(int id) => $"auditorium_{id}";
+        public static string SeatingPlanById(int id) => $"seating_plan_{id}";
     }
 
 
