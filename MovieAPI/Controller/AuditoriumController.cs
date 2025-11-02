@@ -176,22 +176,6 @@ public class AuditoriumController : BaseController
 
             auditorium.AuditoriumName = auditoriumDto.AuditoriumName ?? auditorium.AuditoriumName;
 
-            // Check if seating plan exists
-            if (auditoriumDto.SeatingPlanId.HasValue)
-            {
-                var seatingPlan = await Context.SeatingPlans
-                    .Where(s => s.Id == auditoriumDto.SeatingPlanId.Value)
-                    .FirstOrDefaultAsync();
-
-                if (seatingPlan == null)
-                {
-                    Logger.LogWarning("Seating plan with ID {SeatingPlanId} not found for auditorium update.", auditoriumDto.SeatingPlanId.Value);
-                    return BadRequest($"Seating plan with ID {auditoriumDto.SeatingPlanId.Value} not found.");
-                }
-
-                auditorium.SeatingPlan = seatingPlan;
-            }
-
             Context.Auditoriums.Update(auditorium);
             await Context.SaveChangesAsync();
 
@@ -201,6 +185,133 @@ public class AuditoriumController : BaseController
         catch (Exception ex)
         {
             Logger.LogError(ex, "Error updating auditorium {Id}.", id);
+            return StatusCode(500, "Internal server error");
+        }
+    }
+
+    // ---------------------------------------------- MOVIE MANAGEMENT ----------------------------------------------
+
+    [HttpPost("{id:int}/movies")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
+    public async Task<IActionResult> AddMovieToAuditorium(int id, [FromBody] int movieId)
+    {
+        try
+        {
+            var auditorium = await Context.Auditoriums
+                .Include(a => a.Movies)
+                .FirstOrDefaultAsync(a => a.Id == id);
+            
+            if (auditorium == null)
+            {
+                Logger.LogWarning("Auditorium with ID {Id} not found.", id);
+                return NotFound($"Auditorium with ID {id} not found.");
+            }
+
+            var movie = await Context.Movies.FindAsync(movieId);
+            if (movie == null)
+            {
+                Logger.LogWarning("Movie with ID {MovieId} not found.", movieId);
+                return BadRequest($"Movie with ID {movieId} not found.");
+            }
+
+            if (auditorium.Movies.Any(m => m.Id == movieId))
+            {
+                Logger.LogWarning("Movie {MovieId} is already associated with auditorium {Id}.", movieId, id);
+                return BadRequest($"Movie with ID {movieId} is already associated with this auditorium.");
+            }
+
+            auditorium.Movies.Add(movie);
+            await Context.SaveChangesAsync();
+
+            Logger.LogInformation("Added movie {MovieId} to auditorium {Id}.", movieId, id);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error adding movie {MovieId} to auditorium {Id}.", movieId, id);
+            return StatusCode(500, "Internal server error");
+        }
+    }
+
+    [HttpDelete("{id:int}/movies/{movieId:int}")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
+    public async Task<IActionResult> RemoveMovieFromAuditorium(int id, int movieId)
+    {
+        try
+        {
+            var auditorium = await Context.Auditoriums
+                .Include(a => a.Movies)
+                .FirstOrDefaultAsync(a => a.Id == id);
+            
+            if (auditorium == null)
+            {
+                Logger.LogWarning("Auditorium with ID {Id} not found.", id);
+                return NotFound($"Auditorium with ID {id} not found.");
+            }
+
+            var movie = auditorium.Movies.FirstOrDefault(m => m.Id == movieId);
+            if (movie == null)
+            {
+                Logger.LogWarning("Movie {MovieId} is not associated with auditorium {Id}.", movieId, id);
+                return NotFound($"Movie with ID {movieId} is not associated with this auditorium.");
+            }
+
+            auditorium.Movies.Remove(movie);
+            await Context.SaveChangesAsync();
+
+            Logger.LogInformation("Removed movie {MovieId} from auditorium {Id}.", movieId, id);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error removing movie {MovieId} from auditorium {Id}.", movieId, id);
+            return StatusCode(500, "Internal server error");
+        }
+    }
+
+    // ---------------------------------------------- SEATING PLAN MANAGEMENT ----------------------------------------------
+
+    [HttpPatch("{id:int}/seatingplan")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(500)]
+    public async Task<IActionResult> UpdateAuditoriumSeatingPlan(int id, [FromBody] int seatingPlanId)
+    {
+        try
+        {
+            var auditorium = await Context.Auditoriums.FindAsync(id);
+            if (auditorium == null)
+            {
+                Logger.LogWarning("Auditorium with ID {Id} not found.", id);
+                return NotFound($"Auditorium with ID {id} not found.");
+            }
+
+            var seatingPlan = await Context.SeatingPlans
+                .Where(s => s.Id == seatingPlanId)
+                .FirstOrDefaultAsync();
+
+            if (seatingPlan == null)
+            {
+                Logger.LogWarning("Seating plan with ID {SeatingPlanId} not found.", seatingPlanId);
+                return BadRequest($"Seating plan with ID {seatingPlanId} not found.");
+            }
+
+            auditorium.SeatingPlan = seatingPlan;
+            Context.Auditoriums.Update(auditorium);
+            await Context.SaveChangesAsync();
+
+            Logger.LogInformation("Updated seating plan for auditorium {Id} to {SeatingPlanId}.", id, seatingPlanId);
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error updating seating plan for auditorium {Id}.", id);
             return StatusCode(500, "Internal server error");
         }
     }
