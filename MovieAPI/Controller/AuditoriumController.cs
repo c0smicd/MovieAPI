@@ -304,9 +304,7 @@ public class AuditoriumController : BaseController
                 return NotFound($"Auditorium with ID {id} not found.");
             }
 
-            var seatingPlan = await Context.SeatingPlans
-                .Where(s => s.Id == request.SeatingPlanId)
-                .FirstOrDefaultAsync();
+            var seatingPlan = await Context.SeatingPlans.FindAsync(request.SeatingPlanId);
 
             if (seatingPlan == null)
             {

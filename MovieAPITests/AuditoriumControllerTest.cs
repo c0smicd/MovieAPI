@@ -441,12 +441,6 @@ public class AuditoriumControllerTest : IDisposable
 
     public void Dispose()
     {
-        // Clear cache
-        if(_fakeCache is MemoryCache memoryCache)
-        {
-            memoryCache.Clear();
-        }
-
         // Dispose context
         _fakeContext.Dispose();
     }
