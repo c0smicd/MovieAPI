@@ -221,28 +221,6 @@ public class MovieController : BaseController
                 UpdatedAt = movieDto.UpdatedAt
             };
 
-            // Does there exist auditoriums to link?
-            if (movieDto.AuditoriumIds is { Count: > 0 } auditoriumIds)
-            {
-                var existingCount = await Context.Auditoriums
-                    .CountAsync(a => auditoriumIds.Contains(a.Id));
-
-                if (existingCount != auditoriumIds.Count)
-                {
-                    Logger.LogWarning("One or more AuditoriumIds provided do not exist");
-                    return NotFound(new { message = "One or more AuditoriumIds provided do not exist" });
-                }
-
-                // Link Auditoriums
-                var auditoriums = await Context.Auditoriums
-                    .Where(a => movieDto.AuditoriumIds.Contains(a.Id))
-                    .ToListAsync();
-
-                movie.Auditoriums = auditoriums;
-
-                Context.Movies.Add(movie);
-                await Context.SaveChangesAsync();
-            }
 
 
             var responseDto = new MovieDToResponse
@@ -315,26 +293,6 @@ public class MovieController : BaseController
             movie.PosterUrl = movieDto.PosterUrl ?? movie.PosterUrl;
             movie.UpdatedAt = DateTime.UtcNow;
 
-            // Check if the AuditoriumIds provided exist
-            if (movieDto.AuditoriumIds is { Count: > 0 })
-            {
-                var existsEveryAuditorium = await Context.Auditoriums
-                    .Select(a => a.Id)
-                    .AllAsync(a => movieDto.AuditoriumIds.Contains(a));
-
-                if(!existsEveryAuditorium)
-                {
-                    Logger.LogWarning("One or more AuditoriumIds provided do not exist");
-                    return NotFound(new { message = "One or more AuditoriumIds provided do not exist" });
-                }
-
-                // Update Auditorium associations
-                var auditoriums = await Context.Auditoriums
-                    .Where(a => movieDto.AuditoriumIds.Contains(a.Id))
-                    .ToListAsync();
-
-                movie.Auditoriums = auditoriums;
-            }
 
             await Context.SaveChangesAsync();
 

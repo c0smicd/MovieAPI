@@ -24,7 +24,8 @@ public abstract class BaseController : ControllerBase
     protected readonly ILogger Logger;
     protected readonly IMemoryCache Cache;
 
-    private readonly HashSet<string> _paginationKeys = new();
+    private readonly HashSet<string> _paginationKeys = new ();
+    private readonly object _syncLock = new ();
 
     protected BaseController(AppDbContext context, ILogger logger, IMemoryCache cache)
     {
@@ -76,16 +77,16 @@ public abstract class BaseController : ControllerBase
         Context.IdempotencyRecords.Add(idempotencyRecord);
         await Context.SaveChangesAsync();
     }
-    //TODO handle cache entries here
-    //Question, should I handle caching here or in the calling controllers?
+
+    //Question, should I handle caching here or in the calling controllers? NO
     protected void RegisterPaginationKey(string key)
     {
-        lock(_paginationKeys) _paginationKeys.Add(key);
+        lock(_syncLock) _paginationKeys.Add(key);
 
     }
 
     protected List<string> GetPaginationKeys()
     {
-        lock(_paginationKeys) return _paginationKeys.ToList();
+        lock(_syncLock) return _paginationKeys.ToList();
     }
 }

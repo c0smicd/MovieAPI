@@ -10,7 +10,4 @@ public class MovieDToPatch
     public double RuntimeMinutes { get; set; }
     public string? Genre { get; set; }
     public string? PosterUrl { get; set; }
-
-    // Related entity references by ID
-    public List<int>? AuditoriumIds { get; set; }
 }

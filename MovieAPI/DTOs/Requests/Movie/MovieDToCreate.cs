@@ -33,7 +33,4 @@ public class MovieDToCreate
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-
-    // Related entity references by ID
-    public List<int>? AuditoriumIds { get; set; }
 }

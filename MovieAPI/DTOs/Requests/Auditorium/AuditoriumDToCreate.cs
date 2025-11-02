@@ -11,6 +11,5 @@ public class AuditoriumDToCreate
     public string AuditoriumName { get; set; } = "";
 
     [Required(ErrorMessage = "SeatingPlanIds are required.")]
-    [MinLength(1, ErrorMessage = "At least one SeatingPlanId must be provided.")]
     public int SeatingPlanId { get; set; }
 }

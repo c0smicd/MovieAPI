@@ -50,7 +50,7 @@ public class AuditoriumController : BaseController
                         LayoutJson = a.SeatingPlan.LayoutJson,
                         Description = a.SeatingPlan.Description
                     },
-                    Movies = (a.Movies ?? Enumerable.Empty<Movie>())
+                    Movies = a.Movies
                         .Select(m => new MovieDToResponse
                         {
                             Id = m.Id,
@@ -96,6 +96,7 @@ public class AuditoriumController : BaseController
         if (idempotentResponse != null)
             return BadRequest(idempotentResponse);
 
+        // Idempotency key not found, proceed with creation
         try
         {
             // Does the seating plan exist?
@@ -176,7 +177,6 @@ public class AuditoriumController : BaseController
 
             auditorium.AuditoriumName = auditoriumDto.AuditoriumName ?? auditorium.AuditoriumName;
 
-            Context.Auditoriums.Update(auditorium);
             await Context.SaveChangesAsync();
 
             Logger.LogInformation("Updated auditorium with ID {Id}.", id);
@@ -313,7 +313,7 @@ public class AuditoriumController : BaseController
             }
 
             auditorium.SeatingPlan = seatingPlan;
-            Context.Auditoriums.Update(auditorium);
+
             await Context.SaveChangesAsync();
 
             Logger.LogInformation("Updated seating plan for auditorium {Id} to {SeatingPlanId}.", id, request.SeatingPlanId);
