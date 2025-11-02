@@ -16,7 +16,7 @@ public class AuditoriumController : BaseController
 
     public AuditoriumController(
         AppDbContext context,
-        ILogger<MovieController> logger,
+        ILogger<AuditoriumController> logger,
         IMemoryCache cache) : base(context, logger, cache)
     {
         
@@ -196,8 +196,14 @@ public class AuditoriumController : BaseController
     [ProducesResponseType(400)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
-    public async Task<IActionResult> AddMovieToAuditorium(int id, [FromBody] int movieId)
+    public async Task<IActionResult> AddMovieToAuditorium(int id, [FromBody] AddMovieToAuditoriumRequest request)
     {
+        if (!ModelState.IsValid)
+        {
+            Logger.LogError("Invalid model state for adding movie to auditorium {Id}.", id);
+            return BadRequest(ModelState);
+        }
+
         try
         {
             var auditorium = await Context.Auditoriums
@@ -210,28 +216,28 @@ public class AuditoriumController : BaseController
                 return NotFound($"Auditorium with ID {id} not found.");
             }
 
-            var movie = await Context.Movies.FindAsync(movieId);
+            var movie = await Context.Movies.FindAsync(request.MovieId);
             if (movie == null)
             {
-                Logger.LogWarning("Movie with ID {MovieId} not found.", movieId);
-                return BadRequest($"Movie with ID {movieId} not found.");
+                Logger.LogWarning("Movie with ID {MovieId} not found.", request.MovieId);
+                return BadRequest($"Movie with ID {request.MovieId} not found.");
             }
 
-            if (auditorium.Movies.Any(m => m.Id == movieId))
+            if (auditorium.Movies.Any(m => m.Id == request.MovieId))
             {
-                Logger.LogWarning("Movie {MovieId} is already associated with auditorium {Id}.", movieId, id);
-                return BadRequest($"Movie with ID {movieId} is already associated with this auditorium.");
+                Logger.LogWarning("Movie {MovieId} is already associated with auditorium {Id}.", request.MovieId, id);
+                return BadRequest($"Movie with ID {request.MovieId} is already associated with this auditorium.");
             }
 
             auditorium.Movies.Add(movie);
             await Context.SaveChangesAsync();
 
-            Logger.LogInformation("Added movie {MovieId} to auditorium {Id}.", movieId, id);
+            Logger.LogInformation("Added movie {MovieId} to auditorium {Id}.", request.MovieId, id);
             return NoContent();
         }
         catch (Exception ex)
         {
-            Logger.LogError(ex, "Error adding movie {MovieId} to auditorium {Id}.", movieId, id);
+            Logger.LogError(ex, "Error adding movie to auditorium {Id}.", id);
             return StatusCode(500, "Internal server error");
         }
     }
@@ -281,8 +287,14 @@ public class AuditoriumController : BaseController
     [ProducesResponseType(400)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
-    public async Task<IActionResult> UpdateAuditoriumSeatingPlan(int id, [FromBody] int seatingPlanId)
+    public async Task<IActionResult> UpdateAuditoriumSeatingPlan(int id, [FromBody] UpdateSeatingPlanRequest request)
     {
+        if (!ModelState.IsValid)
+        {
+            Logger.LogError("Invalid model state for updating seating plan for auditorium {Id}.", id);
+            return BadRequest(ModelState);
+        }
+
         try
         {
             var auditorium = await Context.Auditoriums.FindAsync(id);
@@ -293,20 +305,20 @@ public class AuditoriumController : BaseController
             }
 
             var seatingPlan = await Context.SeatingPlans
-                .Where(s => s.Id == seatingPlanId)
+                .Where(s => s.Id == request.SeatingPlanId)
                 .FirstOrDefaultAsync();
 
             if (seatingPlan == null)
             {
-                Logger.LogWarning("Seating plan with ID {SeatingPlanId} not found.", seatingPlanId);
-                return BadRequest($"Seating plan with ID {seatingPlanId} not found.");
+                Logger.LogWarning("Seating plan with ID {SeatingPlanId} not found.", request.SeatingPlanId);
+                return BadRequest($"Seating plan with ID {request.SeatingPlanId} not found.");
             }
 
             auditorium.SeatingPlan = seatingPlan;
             Context.Auditoriums.Update(auditorium);
             await Context.SaveChangesAsync();
 
-            Logger.LogInformation("Updated seating plan for auditorium {Id} to {SeatingPlanId}.", id, seatingPlanId);
+            Logger.LogInformation("Updated seating plan for auditorium {Id} to {SeatingPlanId}.", id, request.SeatingPlanId);
             return NoContent();
         }
         catch (Exception ex)

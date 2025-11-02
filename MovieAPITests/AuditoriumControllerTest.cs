@@ -14,7 +14,7 @@ namespace MovieAPITests;
 public class AuditoriumControllerTest : IDisposable
 {
     private readonly AppDbContext _fakeContext;
-    private readonly ILogger<MovieController> _fakeLogger;
+    private readonly ILogger<AuditoriumController> _fakeLogger;
     private readonly IMemoryCache _fakeCache;
     private readonly AuditoriumController _controller;
 
@@ -26,7 +26,7 @@ public class AuditoriumControllerTest : IDisposable
 
         _fakeContext = new AppDbContext(options);
 
-        _fakeLogger = A.Fake<ILogger<MovieController>>();
+        _fakeLogger = A.Fake<ILogger<AuditoriumController>>();
         _fakeCache = A.Fake<IMemoryCache>();
 
         _controller = new AuditoriumController(_fakeContext, _fakeLogger, _fakeCache);
@@ -110,8 +110,10 @@ public class AuditoriumControllerTest : IDisposable
         _fakeContext.Movies.Add(movie);
         await _fakeContext.SaveChangesAsync();
 
+        var request = new AddMovieToAuditoriumRequest { MovieId = 1 };
+
         // Act
-        var result = await _controller.AddMovieToAuditorium(1, 1);
+        var result = await _controller.AddMovieToAuditorium(1, request);
 
         // Assert
         Assert.IsType<NoContentResult>(result);
@@ -151,8 +153,10 @@ public class AuditoriumControllerTest : IDisposable
         _fakeContext.Auditoriums.Add(auditorium);
         await _fakeContext.SaveChangesAsync();
 
+        var request = new AddMovieToAuditoriumRequest { MovieId = 999 };
+
         // Act
-        var result = await _controller.AddMovieToAuditorium(1, 999);
+        var result = await _controller.AddMovieToAuditorium(1, request);
 
         // Assert
         Assert.IsType<BadRequestObjectResult>(result);
@@ -174,8 +178,10 @@ public class AuditoriumControllerTest : IDisposable
         _fakeContext.Movies.Add(movie);
         await _fakeContext.SaveChangesAsync();
 
+        var request = new AddMovieToAuditoriumRequest { MovieId = 1 };
+
         // Act
-        var result = await _controller.AddMovieToAuditorium(999, 1);
+        var result = await _controller.AddMovieToAuditorium(999, request);
 
         // Assert
         Assert.IsType<NotFoundObjectResult>(result);
@@ -219,8 +225,10 @@ public class AuditoriumControllerTest : IDisposable
         _fakeContext.Movies.Add(movie);
         await _fakeContext.SaveChangesAsync();
 
+        var request = new AddMovieToAuditoriumRequest { MovieId = 1 };
+
         // Act
-        var result = await _controller.AddMovieToAuditorium(1, 1);
+        var result = await _controller.AddMovieToAuditorium(1, request);
 
         // Assert
         Assert.IsType<BadRequestObjectResult>(result);
@@ -355,8 +363,10 @@ public class AuditoriumControllerTest : IDisposable
         _fakeContext.Auditoriums.Add(auditorium);
         await _fakeContext.SaveChangesAsync();
 
+        var request = new UpdateSeatingPlanRequest { SeatingPlanId = 2 };
+
         // Act
-        var result = await _controller.UpdateAuditoriumSeatingPlan(1, 2);
+        var result = await _controller.UpdateAuditoriumSeatingPlan(1, request);
 
         // Assert
         Assert.IsType<NoContentResult>(result);
@@ -385,8 +395,10 @@ public class AuditoriumControllerTest : IDisposable
         _fakeContext.SeatingPlans.Add(seatingPlan);
         await _fakeContext.SaveChangesAsync();
 
+        var request = new UpdateSeatingPlanRequest { SeatingPlanId = 1 };
+
         // Act
-        var result = await _controller.UpdateAuditoriumSeatingPlan(999, 1);
+        var result = await _controller.UpdateAuditoriumSeatingPlan(999, request);
 
         // Assert
         Assert.IsType<NotFoundObjectResult>(result);
@@ -418,8 +430,10 @@ public class AuditoriumControllerTest : IDisposable
         _fakeContext.Auditoriums.Add(auditorium);
         await _fakeContext.SaveChangesAsync();
 
+        var request = new UpdateSeatingPlanRequest { SeatingPlanId = 999 };
+
         // Act
-        var result = await _controller.UpdateAuditoriumSeatingPlan(1, 999);
+        var result = await _controller.UpdateAuditoriumSeatingPlan(1, request);
 
         // Assert
         Assert.IsType<BadRequestObjectResult>(result);
@@ -432,5 +446,8 @@ public class AuditoriumControllerTest : IDisposable
         {
             memoryCache.Clear();
         }
+
+        // Dispose context
+        _fakeContext.Dispose();
     }
 }
