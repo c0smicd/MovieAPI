@@ -65,6 +65,7 @@ public abstract class BaseController : ControllerBase
     
     protected async Task CreateIdempotencyRecord<T>(string idempotencyKey, string requestPath, int statusCode, T responseBody)
     {
+        const int timeToLifeFromNow = 5;
         var idempotencyRecord = new IdempotencyRecord
         {
             IdempotencyKey = idempotencyKey,
@@ -72,7 +73,7 @@ public abstract class BaseController : ControllerBase
             StatusCode = statusCode,
             ResponseBody = JsonSerializer.Serialize(responseBody),
             CreatedAt = DateTime.UtcNow,
-            ExpiresAt = DateTime.UtcNow.AddMinutes(5)
+            ExpiresAt = DateTime.UtcNow.AddMinutes(timeToLifeFromNow)
         };
 
         Context.IdempotencyRecords.Add(idempotencyRecord);

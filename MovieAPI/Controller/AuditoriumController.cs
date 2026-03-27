@@ -11,16 +11,12 @@ namespace MovieAPI.Controller;
 
 [ApiController]
 [Route("api/v1/auditoriums")]
-public class AuditoriumController : BaseController
+public class AuditoriumController(AppDbContext context,
+    ILogger<AuditoriumController> logger,
+    IMemoryCache cache) : BaseController(context, logger, cache)
 {
 
-    public AuditoriumController(
-        AppDbContext context,
-        ILogger<AuditoriumController> logger,
-        IMemoryCache cache) : base(context, logger, cache)
-    {
-        
-    }
+
 
     // ---------------------------------------------- GET METHODS ----------------------------------------------
     [HttpGet("{id:int}")]

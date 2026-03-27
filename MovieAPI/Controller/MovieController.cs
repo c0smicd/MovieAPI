@@ -221,6 +221,11 @@ public class MovieController : BaseController
                 UpdatedAt = movieDto.UpdatedAt
             };
 
+            // Save to database
+            // No idea how, but I somehow forgot this
+            Context.Movies.Add(movie);
+            await Context.SaveChangesAsync();
+
 
 
             var responseDto = new MovieDToResponse

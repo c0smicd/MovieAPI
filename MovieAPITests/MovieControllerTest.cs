@@ -5,6 +5,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using MovieAPI.Controller;
 using MovieAPI.Data;
+using MovieAPI.DTOs.Requests.Movie;
 using MovieAPI.DTOs.Response;
 using MovieAPI.Models;
 
@@ -13,22 +14,22 @@ namespace MovieAPITests;
 public class MovieControllerTest : IDisposable
 {
     private readonly AppDbContext _fakeContext;
-    private readonly ILogger<MovieController> _fakeLogger;
     private readonly IMemoryCache _fakeCache;
     private readonly MovieController _controller;
 
     public MovieControllerTest()
     {
+
         var options = new DbContextOptionsBuilder<AppDbContext>()
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
 
         _fakeContext = new AppDbContext(options);
 
-        _fakeLogger = A.Fake<ILogger<MovieController>>();
+        var fakeLogger = A.Fake<ILogger<MovieController>>();
         _fakeCache = A.Fake<IMemoryCache>();
 
-        _controller = new MovieController(_fakeContext, _fakeLogger, _fakeCache);
+        _controller = new MovieController(_fakeContext, fakeLogger, _fakeCache);
     }
 
 
@@ -188,6 +189,91 @@ public class MovieControllerTest : IDisposable
         Assert.Equal(2, returnedMovies.Count);
         Assert.Contains(returnedMovies, m => m.Title == "Movie A");
         Assert.Contains(returnedMovies, m => m.Title == "Movie B");
+    }
+
+    [Fact]
+    public async Task CreateMovieInDatabase_Returns_201()
+    {
+
+        // Arrange
+        var newMovie = new Movie
+        {
+            Title = "New Movie",
+            Description = "New movie description",
+            Year = 2000,
+            Genre = "New Genre",
+            Rating = 8.0,
+            PosterUrl = "newposter"
+        };
+
+        var movieDto = new MovieDToCreate
+        {
+            Title = newMovie.Title,
+            Description = newMovie.Description,
+            Year = newMovie.Year,
+            Genre = newMovie.Genre,
+            Rating = newMovie.Rating ?? 0,
+            PosterUrl = newMovie.PosterUrl
+        };
+
+        // Act
+        var response = await _controller.CreateMovie(movieDto);
+
+        // Assert
+
+        Assert.IsType<CreatedAtActionResult>(response.Result);
+
+        var createdMovie = await _fakeContext.Movies.FirstOrDefaultAsync(m => m.Title == "New Movie");
+        Assert.NotNull(createdMovie);
+        Assert.Equal("New Genre", createdMovie.Genre);
+        Assert.Equal(8.0, createdMovie.Rating);
+        Assert.Equal("newposter", createdMovie.PosterUrl);
+
+    }
+
+    [Fact]
+    public async Task UpdateMovieInDatabase_Returns_204()
+    {
+        // Arrange
+        var existingMovie = new Movie
+        {
+            Id = 1,
+            Title = "Existing Movie",
+            Description = "Existing movie description",
+            Year = 1990,
+            Genre = "Existing Genre",
+            Rating = 7.0,
+            PosterUrl = "existingposter"
+        };
+
+        _fakeContext.Movies.Add(existingMovie);
+        await _fakeContext.SaveChangesAsync();
+
+        var updateDto = new MovieDToPatch
+        {
+            Title = "Updated Movie",
+            Description = "Updated movie description",
+            Year = 1995,
+            Genre = "Updated Genre",
+            Rating = 8.5,
+            PosterUrl = "updatedposter"
+        };
+
+        // Act
+        var response = _controller.UpdateMovie(existingMovie.Id, updateDto);
+
+        // Assert
+        Assert.IsType<NoContentResult>(response.Result);
+
+        var updatedMovie = _fakeContext.Movies.FirstOrDefault(m => m.Id == existingMovie.Id);
+        Assert.NotNull(updatedMovie);
+        Assert.Equal("Updated Movie", updatedMovie.Title);
+        Assert.Equal("Updated Genre", updatedMovie.Genre);
+        Assert.Equal(8.5, updatedMovie.Rating);
+        Assert.Equal(1995, updatedMovie.Year);
+        Assert.Equal("updatedposter", updatedMovie.PosterUrl);
+
+
     }
 
     // Cleanup after each test

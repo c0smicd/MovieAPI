@@ -2,50 +2,70 @@ using Microsoft.EntityFrameworkCore;
 using MovieAPI.Data;
 using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console(
+        outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}"
+        )
+    .WriteTo.File("logs/api.log", rollingInterval: RollingInterval.Day,
+        outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}")
+    .CreateBootstrapLogger(); // <-- Using CreateBootstrapLogger to ensure logging is available during app startup
 
-builder.Services.AddDbContext<AppDbContext>(options => 
-    options.UseMySql(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        new MySqlServerVersion(new Version(10, 11))
+try
+{
+    Log.Information("Starting MovieAPI application...");
+
+    var builder = WebApplication.CreateBuilder(args);
+
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseMySql(
+            builder.Configuration.GetConnectionString("DefaultConnection"),
+            new MySqlServerVersion(new Version(10, 11))
         )
     );
 
-Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console()
-    .WriteTo.File("logs/api.log", rollingInterval: RollingInterval.Day)
-    .CreateLogger();
 
-// Add memory caching
-builder.Services.AddMemoryCache();
+    //--- Builder Services ---
+
+    // Add memory caching
+    builder.Services.AddMemoryCache();
+    // Add controllers
+    builder.Services.AddControllers()
+        .AddJsonOptions(options =>
+        {
+            // Return JSON in camelCase
+            options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+        });
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+    builder.Host.UseSerilog();
 
 
-// Add controllers
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
+    var app = builder.Build();
+
+    // --- App Middleware ---
+
+    if (app.Environment.IsDevelopment())
     {
-        // Return JSON in camelCase
-        options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
-    });
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
 
+    app.UseHttpsRedirection();
 
+    app.MapControllers();
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Host.UseSerilog();
+    // --- Run App ---
 
-    
-var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
+    app.Run();
+}
+catch (Exception ex)
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    Log.Fatal(ex, "Application terminated unexpectedly");
+}
+finally
+{
+    Log.CloseAndFlush();
 }
 
-app.UseHttpsRedirection();
 
-app.MapControllers();
-
-app.Run();
     
