@@ -1,7 +1,8 @@
+using System.Text.Json;
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using MovieAPI.Controller;
 using MovieAPI.Data;
@@ -14,12 +15,11 @@ namespace MovieAPITests;
 public class MovieControllerTest : IDisposable
 {
     private readonly AppDbContext _fakeContext;
-    private readonly IMemoryCache _fakeCache;
+    private readonly IDistributedCache _fakeCache;
     private readonly MovieController _controller;
 
     public MovieControllerTest()
     {
-
         var options = new DbContextOptionsBuilder<AppDbContext>()
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
@@ -27,7 +27,7 @@ public class MovieControllerTest : IDisposable
         _fakeContext = new AppDbContext(options);
 
         var fakeLogger = A.Fake<ILogger<MovieController>>();
-        _fakeCache = A.Fake<IMemoryCache>();
+        _fakeCache = A.Fake<IDistributedCache>();
 
         _controller = new MovieController(_fakeContext, fakeLogger, _fakeCache);
     }
@@ -43,9 +43,9 @@ public class MovieControllerTest : IDisposable
             new MovieDToResponse { Id = 2, Title = "The Matrix", Rating = 9.0, Genre = "Action", PosterUrl = "poster2" }
         };
 
-        object? cacheEntry = cachedMovies;
-        A.CallTo(() => _fakeCache.TryGetValue(A<object>._, out cacheEntry))
-            .Returns(true);
+        var cachedBytes = JsonSerializer.SerializeToUtf8Bytes(cachedMovies);
+        A.CallTo(() => _fakeCache.GetAsync(A<string>._, A<CancellationToken>._))
+            .Returns(Task.FromResult<byte[]?>(cachedBytes));
 
         // Act
         var result = await _controller.GetMovies();
@@ -61,9 +61,8 @@ public class MovieControllerTest : IDisposable
     public async Task GetMovies_ReturnsOk_WhenDataIsNotCached()
     {
         // Arrange
-        object? cacheEntry = null;
-        A.CallTo(() => _fakeCache.TryGetValue(A<object>._, out cacheEntry))
-            .Returns(false);
+        A.CallTo(() => _fakeCache.GetAsync(A<string>._, A<CancellationToken>._))
+            .Returns(Task.FromResult<byte[]?>(null));
 
         // Seed data directly into real in-memory context
         _fakeContext.Movies.Add(new Movie
@@ -90,7 +89,6 @@ public class MovieControllerTest : IDisposable
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
         var returnedMovies = Assert.IsAssignableFrom<IEnumerable<MovieDToResponse>>(okResult.Value).ToList();
-
 
         Assert.Equal(2, returnedMovies.Count);
         Assert.Equal("Interstellar", returnedMovies[0].Title);
@@ -127,9 +125,6 @@ public class MovieControllerTest : IDisposable
     public async Task GetMovies_ReturnsOk_MoviesByAuditoriumId()
     {
         // Arrange
-
-        // Seed context with seating plan and auditorium
-
         var seatingPlan1 = new SeatingPlan
         {
             Id = 1,
@@ -166,7 +161,6 @@ public class MovieControllerTest : IDisposable
         _fakeContext.Auditoriums.AddRange(auditorium1, auditorium2);
         await _fakeContext.SaveChangesAsync();
 
-        // Seed movies and associate with auditoriums
         var movie1 = new Movie { Id = 1, Title = "Movie A", Genre = "Genre A", Rating = 7.5, PosterUrl = "posterA" };
         var movie2 = new Movie { Id = 2, Title = "Movie B", Genre = "Genre B", Rating = 8.5, PosterUrl = "posterB" };
         var movie3 = new Movie { Id = 3, Title = "Movie C", Genre = "Genre C", Rating = 9.0, PosterUrl = "posterC" };
@@ -192,7 +186,6 @@ public class MovieControllerTest : IDisposable
     [Fact]
     public async Task CreateMovieInDatabase_Returns_201()
     {
-
         // Arrange
         var newMovie = new Movie
         {
@@ -218,7 +211,6 @@ public class MovieControllerTest : IDisposable
         var response = await _controller.CreateMovie(movieDto);
 
         // Assert
-
         Assert.IsType<CreatedAtActionResult>(response.Result);
 
         var createdMovie = await _fakeContext.Movies.FirstOrDefaultAsync(m => m.Title == "New Movie");
@@ -226,7 +218,6 @@ public class MovieControllerTest : IDisposable
         Assert.Equal("New Genre", createdMovie.Genre);
         Assert.Equal(8.0, createdMovie.Rating);
         Assert.Equal("newposter", createdMovie.PosterUrl);
-
     }
 
     [Fact]
@@ -270,18 +261,10 @@ public class MovieControllerTest : IDisposable
         Assert.Equal(8.5, updatedMovie.Rating);
         Assert.Equal(1995, updatedMovie.Year);
         Assert.Equal("updatedposter", updatedMovie.PosterUrl);
-
-
     }
 
-    // Cleanup after each test
     public void Dispose()
     {
-        // Clear cache
-       if(_fakeCache is MemoryCache memoryCache)
-        {
-            memoryCache.Clear();
-        }
-
+        _fakeContext.Dispose();
     }
 }

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Caching.Distributed;
 using MovieAPI.Data;
 using MovieAPI.DTOs.Requests.SeatingPlan;
 using MovieAPI.DTOs.Response;
@@ -12,13 +12,11 @@ namespace MovieAPI.Controller;
 [Route("api/v1/seatingplan")]
 public class SeatingPlanController : BaseController
 {
-    
     public SeatingPlanController(
         AppDbContext context,
         ILogger<SeatingPlanController> logger,
-        IMemoryCache cache) : base(context, logger, cache)
+        IDistributedCache cache) : base(context, logger, cache)
     {
-        
     }
 
     [HttpGet("{id:int}")]
@@ -29,7 +27,8 @@ public class SeatingPlanController : BaseController
     {
         try
         {
-            if (Cache.TryGetValue(CacheKeys.SeatingPlanById(id), out SeatingPlanDToResponse? cachedSeatingPlan))
+            var cachedSeatingPlan = await GetCacheAsync<SeatingPlanDToResponse>(CacheKeys.SeatingPlanById(id));
+            if (cachedSeatingPlan != null)
             {
                 Logger.LogInformation("Seating plan {id} retrieved from cache", id);
                 return Ok(cachedSeatingPlan);
@@ -45,7 +44,7 @@ public class SeatingPlanController : BaseController
                     Description = s.Description
                 }).FirstOrDefaultAsync();
 
-            Cache.Set(CacheKeys.SeatingPlanById(id), seatingplan);
+            await SetCacheAsync(CacheKeys.SeatingPlanById(id), seatingplan);
             Logger.LogInformation("Seating plan {id} retrieved", id);
 
             return Ok(seatingplan);
@@ -67,7 +66,6 @@ public class SeatingPlanController : BaseController
         [FromBody] SeatingPlanDToCreate seatingPlanDTo,
         [FromHeader(Name = "Idempotency-Key")] string? idempotencyKey = null)
     {
-
         if (!ModelState.IsValid)
         {
             Logger.LogError("Invalid model state for creating seating plan");
@@ -76,9 +74,7 @@ public class SeatingPlanController : BaseController
 
         var idempotencyResponse = await CheckIdempotencyAsync<SeatingPlanDToResponse>(idempotencyKey);
         if (idempotencyResponse != null)
-        {
             return idempotencyResponse;
-        }
 
         try
         {
@@ -98,9 +94,7 @@ public class SeatingPlanController : BaseController
             };
 
             if (!string.IsNullOrEmpty(idempotencyKey))
-            {
                 await CreateIdempotencyRecord(idempotencyKey, HttpContext.Request.Path, 201, responseDto);
-            }
 
             Logger.LogInformation("Seating plan {id} created", seatplan.Id);
             return CreatedAtAction(nameof(GetSeatingPlanById), new { seatplan.Id }, seatplan);
@@ -110,6 +104,5 @@ public class SeatingPlanController : BaseController
             Logger.LogError(ex, "Error creating seating plan");
             return StatusCode(500, "Internal server error");
         }
-
     }
 }

@@ -1,7 +1,6 @@
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Caching.Distributed;
 using MovieAPI.Data;
 using MovieAPI.DTOs.Requests.Auditorium;
 using MovieAPI.DTOs.Response;
@@ -13,12 +12,10 @@ namespace MovieAPI.Controller;
 [Route("api/v1/auditoriums")]
 public class AuditoriumController(AppDbContext context,
     ILogger<AuditoriumController> logger,
-    IMemoryCache cache) : BaseController(context, logger, cache)
+    IDistributedCache cache) : BaseController(context, logger, cache)
 {
-
-
-
     // ---------------------------------------------- GET METHODS ----------------------------------------------
+
     [HttpGet("{id:int}")]
     [ProducesResponseType(200, Type = typeof(AuditoriumDToResponse))]
     [ProducesResponseType(404)]
@@ -27,13 +24,13 @@ public class AuditoriumController(AppDbContext context,
     {
         try
         {
-            // Check cache first
-            if (Cache.TryGetValue(CacheKeys.AuditoriumById(id), out AuditoriumDToResponse? cachedAuditorium))
+            var cachedAuditorium = await GetCacheAsync<AuditoriumDToResponse>(CacheKeys.AuditoriumById(id));
+            if (cachedAuditorium != null)
             {
                 Logger.LogInformation("Auditorium {Id} retrieved from cache.", id);
                 return Ok(cachedAuditorium);
             }
-            // Get the auditorium with SeatingPlan and if there are movies associated with it
+
             var auditorium = await Context.Auditoriums
                 .Where(a => a.Id == id)
                 .Select(a => new AuditoriumDToResponse
@@ -65,7 +62,7 @@ public class AuditoriumController(AppDbContext context,
                 return NotFound();
             }
 
-            Cache.Set(CacheKeys.AuditoriumById(id), auditorium, TimeSpan.FromMinutes(10));
+            await SetCacheAsync(CacheKeys.AuditoriumById(id), auditorium, TimeSpan.FromMinutes(10));
             Logger.LogInformation("Auditorium {Id} retrieved from database and cached.", id);
 
             return Ok(auditorium);
@@ -93,15 +90,12 @@ public class AuditoriumController(AppDbContext context,
             return BadRequest(ModelState);
         }
 
-        // Check for idempotency
         var idempotentResponse = await CheckIdempotencyAsync<AuditoriumDToResponse>(idempotencyKey);
         if (idempotentResponse != null)
             return idempotentResponse;
 
-        // Idempotency key not found, proceed with creation
         try
         {
-            // Does the seating plan exist?
             var seatingPlan = await Context.SeatingPlans
                 .Where(s => s.Id == auditoriumDto.SeatingPlanId)
                 .FirstOrDefaultAsync();
@@ -109,10 +103,9 @@ public class AuditoriumController(AppDbContext context,
             if (seatingPlan == null)
             {
                 Logger.LogWarning("Seating plan with ID {SeatingPlanId} not found.", auditoriumDto.SeatingPlanId);
-
                 return BadRequest($"Seating plan with ID {auditoriumDto.SeatingPlanId} not found.");
             }
-            // If so create the auditorium accordingly
+
             var auditorium = new Auditorium
             {
                 Id = auditoriumDto.Id,
@@ -122,8 +115,7 @@ public class AuditoriumController(AppDbContext context,
 
             Context.Auditoriums.Add(auditorium);
             await Context.SaveChangesAsync();
-            
-            // Prepare response DTO
+
             var responseDto = new AuditoriumDToResponse
             {
                 Id = auditorium.Id,
@@ -138,11 +130,8 @@ public class AuditoriumController(AppDbContext context,
                 Movies = null
             };
 
-            // Store idempotency record
             if (!string.IsNullOrEmpty(idempotencyKey))
-            {
                 await CreateIdempotencyRecord(idempotencyKey, HttpContext.Request.Path, 201, responseDto);
-            }
 
             Logger.LogInformation("Created auditorium with ID {id}.", auditorium.Id);
             return CreatedAtAction(nameof(GetAuditoriumById), new { id = auditorium.Id }, responseDto);
@@ -182,9 +171,7 @@ public class AuditoriumController(AppDbContext context,
 
             await Context.SaveChangesAsync();
 
-            // Invalidate Cache
-            Cache.Remove(CacheKeys.AuditoriumById(id));
-
+            await RemoveCacheAsync(CacheKeys.AuditoriumById(id));
 
             Logger.LogInformation("Updated auditorium with ID {Id}.", id);
             return NoContent();
@@ -216,7 +203,7 @@ public class AuditoriumController(AppDbContext context,
             var auditorium = await Context.Auditoriums
                 .Include(a => a.Movies)
                 .FirstOrDefaultAsync(a => a.Id == id);
-            
+
             if (auditorium == null)
             {
                 Logger.LogWarning("Auditorium with ID {Id} not found.", id);
@@ -236,7 +223,7 @@ public class AuditoriumController(AppDbContext context,
                 return BadRequest($"Movie with ID {request.MovieId} is already associated with this auditorium.");
             }
 
-            Cache.Remove(CacheKeys.AuditoriumById(id));
+            await RemoveCacheAsync(CacheKeys.AuditoriumById(id));
 
             auditorium.Movies.Add(movie);
             await Context.SaveChangesAsync();
@@ -262,7 +249,7 @@ public class AuditoriumController(AppDbContext context,
             var auditorium = await Context.Auditoriums
                 .Include(a => a.Movies)
                 .FirstOrDefaultAsync(a => a.Id == id);
-            
+
             if (auditorium == null)
             {
                 Logger.LogWarning("Auditorium with ID {Id} not found.", id);
@@ -279,7 +266,7 @@ public class AuditoriumController(AppDbContext context,
             auditorium.Movies.Remove(movie);
             await Context.SaveChangesAsync();
 
-            Cache.Remove(CacheKeys.AuditoriumById(id));
+            await RemoveCacheAsync(CacheKeys.AuditoriumById(id));
 
             Logger.LogInformation("Removed movie {MovieId} from auditorium {Id}.", movieId, id);
             return NoContent();
@@ -316,7 +303,6 @@ public class AuditoriumController(AppDbContext context,
             }
 
             var seatingPlan = await Context.SeatingPlans.FindAsync(request.SeatingPlanId);
-
             if (seatingPlan == null)
             {
                 Logger.LogWarning("Seating plan with ID {SeatingPlanId} not found.", request.SeatingPlanId);
@@ -327,7 +313,7 @@ public class AuditoriumController(AppDbContext context,
 
             await Context.SaveChangesAsync();
 
-            Cache.Remove(CacheKeys.AuditoriumById(id));
+            await RemoveCacheAsync(CacheKeys.AuditoriumById(id));
 
             Logger.LogInformation("Updated seating plan for auditorium {Id} to {SeatingPlanId}.", id, request.SeatingPlanId);
             return NoContent();

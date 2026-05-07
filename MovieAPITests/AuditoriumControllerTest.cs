@@ -1,7 +1,7 @@
 using FakeItEasy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using MovieAPI.Controller;
 using MovieAPI.Data;
@@ -15,7 +15,7 @@ public class AuditoriumControllerTest : IDisposable
 {
     private readonly AppDbContext _fakeContext;
     private readonly ILogger<AuditoriumController> _fakeLogger;
-    private readonly IMemoryCache _fakeCache;
+    private readonly IDistributedCache _fakeCache;
     private readonly AuditoriumController _controller;
 
     public AuditoriumControllerTest()
@@ -27,7 +27,7 @@ public class AuditoriumControllerTest : IDisposable
         _fakeContext = new AppDbContext(options);
 
         _fakeLogger = A.Fake<ILogger<AuditoriumController>>();
-        _fakeCache = A.Fake<IMemoryCache>();
+        _fakeCache = A.Fake<IDistributedCache>();
 
         _controller = new AuditoriumController(_fakeContext, _fakeLogger, _fakeCache);
     }

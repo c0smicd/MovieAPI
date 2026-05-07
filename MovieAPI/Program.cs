@@ -26,8 +26,12 @@ try
 
     //--- Builder Services ---
 
-    // Add memory caching
-    builder.Services.AddMemoryCache();
+    // Add Redis distributed caching
+    builder.Services.AddStackExchangeRedisCache(options =>
+    {
+        options.Configuration = builder.Configuration.GetConnectionString("Redis");
+        options.InstanceName = "MovieAPI:";
+    });
     // Add controllers
     builder.Services.AddControllers()
         .AddJsonOptions(options =>
