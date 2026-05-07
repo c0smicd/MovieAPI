@@ -13,7 +13,9 @@ public class Auditorium
 
     // Foreign Model Relations
     [Required]
-    public SeatingPlan SeatingPlan { get; set; } = new();
+    public int SeatingPlanId { get; set; }
+
+    public SeatingPlan SeatingPlan { get; set; } = null!;
 
     public ICollection<Movie> Movies { get; set; } = new List<Movie>();
 }

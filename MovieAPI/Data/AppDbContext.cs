@@ -19,9 +19,15 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        // For fast lookup and cleanup of idempotency records
+
         modelBuilder.Entity<IdempotencyRecord>()
             .HasIndex(i => i.ExpiresAt);
+
+        modelBuilder.Entity<Auditorium>()
+            .HasOne(a => a.SeatingPlan)
+            .WithMany(s => s.Auditoriums)
+            .HasForeignKey(a => a.SeatingPlanId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
     
 }

@@ -15,8 +15,6 @@ public class SeatingPlan
     [MaxLength(500, ErrorMessage = "Description length cannot exceed 500 characters.")]
     public string Description { get; set; } = "";
 
-    // Foreign Model Relations
-    public int? AuditoriumId { get; set; }
-
-    public Auditorium? Auditorium { get; set; }
+    // Navigation
+    public ICollection<Auditorium> Auditoriums { get; set; } = new List<Auditorium>();
 }

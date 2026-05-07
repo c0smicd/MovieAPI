@@ -41,8 +41,7 @@ public class AuditoriumControllerTest : IDisposable
             Id = 1,
             PlanName = "Standard Plan",
             LayoutJson = "{}",
-            Description = "A standard seating plan.",
-            AuditoriumId = 1
+            Description = "A standard seating plan."
         };
 
         _fakeContext.SeatingPlans.Add(seatingPlan);
@@ -52,7 +51,7 @@ public class AuditoriumControllerTest : IDisposable
         {
             Id = 1,
             AuditoriumName = "Old Name",
-            SeatingPlan = seatingPlan
+            SeatingPlanId = seatingPlan.Id
         };
 
         _fakeContext.Auditoriums.Add(auditorium);
@@ -68,7 +67,7 @@ public class AuditoriumControllerTest : IDisposable
 
         // Assert
         Assert.IsType<NoContentResult>(result);
-        
+
         var updatedAuditorium = await _fakeContext.Auditoriums.FindAsync(1);
         Assert.NotNull(updatedAuditorium);
         Assert.Equal("New Name", updatedAuditorium.AuditoriumName);
@@ -83,8 +82,7 @@ public class AuditoriumControllerTest : IDisposable
             Id = 1,
             PlanName = "Standard Plan",
             LayoutJson = "{}",
-            Description = "A standard seating plan.",
-            AuditoriumId = 1
+            Description = "A standard seating plan."
         };
 
         _fakeContext.SeatingPlans.Add(seatingPlan);
@@ -94,7 +92,7 @@ public class AuditoriumControllerTest : IDisposable
         {
             Id = 1,
             AuditoriumName = "Main Auditorium",
-            SeatingPlan = seatingPlan
+            SeatingPlanId = seatingPlan.Id
         };
 
         var movie = new Movie
@@ -117,11 +115,11 @@ public class AuditoriumControllerTest : IDisposable
 
         // Assert
         Assert.IsType<NoContentResult>(result);
-        
+
         var updatedAuditorium = await _fakeContext.Auditoriums
             .Include(a => a.Movies)
             .FirstOrDefaultAsync(a => a.Id == 1);
-        
+
         Assert.NotNull(updatedAuditorium);
         Assert.Single(updatedAuditorium.Movies);
         Assert.Equal(1, updatedAuditorium.Movies.First().Id);
@@ -136,8 +134,7 @@ public class AuditoriumControllerTest : IDisposable
             Id = 1,
             PlanName = "Standard Plan",
             LayoutJson = "{}",
-            Description = "A standard seating plan.",
-            AuditoriumId = 1
+            Description = "A standard seating plan."
         };
 
         _fakeContext.SeatingPlans.Add(seatingPlan);
@@ -147,7 +144,7 @@ public class AuditoriumControllerTest : IDisposable
         {
             Id = 1,
             AuditoriumName = "Main Auditorium",
-            SeatingPlan = seatingPlan
+            SeatingPlanId = seatingPlan.Id
         };
 
         _fakeContext.Auditoriums.Add(auditorium);
@@ -196,8 +193,7 @@ public class AuditoriumControllerTest : IDisposable
             Id = 1,
             PlanName = "Standard Plan",
             LayoutJson = "{}",
-            Description = "A standard seating plan.",
-            AuditoriumId = 1
+            Description = "A standard seating plan."
         };
 
         _fakeContext.SeatingPlans.Add(seatingPlan);
@@ -216,7 +212,7 @@ public class AuditoriumControllerTest : IDisposable
         {
             Id = 1,
             AuditoriumName = "Main Auditorium",
-            SeatingPlan = seatingPlan
+            SeatingPlanId = seatingPlan.Id
         };
 
         auditorium.Movies.Add(movie);
@@ -243,8 +239,7 @@ public class AuditoriumControllerTest : IDisposable
             Id = 1,
             PlanName = "Standard Plan",
             LayoutJson = "{}",
-            Description = "A standard seating plan.",
-            AuditoriumId = 1
+            Description = "A standard seating plan."
         };
 
         _fakeContext.SeatingPlans.Add(seatingPlan);
@@ -263,7 +258,7 @@ public class AuditoriumControllerTest : IDisposable
         {
             Id = 1,
             AuditoriumName = "Main Auditorium",
-            SeatingPlan = seatingPlan
+            SeatingPlanId = seatingPlan.Id
         };
 
         auditorium.Movies.Add(movie);
@@ -277,11 +272,11 @@ public class AuditoriumControllerTest : IDisposable
 
         // Assert
         Assert.IsType<NoContentResult>(result);
-        
+
         var updatedAuditorium = await _fakeContext.Auditoriums
             .Include(a => a.Movies)
             .FirstOrDefaultAsync(a => a.Id == 1);
-        
+
         Assert.NotNull(updatedAuditorium);
         Assert.Empty(updatedAuditorium.Movies);
     }
@@ -305,8 +300,7 @@ public class AuditoriumControllerTest : IDisposable
             Id = 1,
             PlanName = "Standard Plan",
             LayoutJson = "{}",
-            Description = "A standard seating plan.",
-            AuditoriumId = 1
+            Description = "A standard seating plan."
         };
 
         _fakeContext.SeatingPlans.Add(seatingPlan);
@@ -316,7 +310,7 @@ public class AuditoriumControllerTest : IDisposable
         {
             Id = 1,
             AuditoriumName = "Main Auditorium",
-            SeatingPlan = seatingPlan
+            SeatingPlanId = seatingPlan.Id
         };
 
         _fakeContext.Auditoriums.Add(auditorium);
@@ -338,8 +332,7 @@ public class AuditoriumControllerTest : IDisposable
             Id = 1,
             PlanName = "Standard Plan",
             LayoutJson = "{}",
-            Description = "A standard seating plan.",
-            AuditoriumId = 1
+            Description = "A standard seating plan."
         };
 
         var seatingPlan2 = new SeatingPlan
@@ -357,7 +350,7 @@ public class AuditoriumControllerTest : IDisposable
         {
             Id = 1,
             AuditoriumName = "Main Auditorium",
-            SeatingPlan = seatingPlan1
+            SeatingPlanId = seatingPlan1.Id
         };
 
         _fakeContext.Auditoriums.Add(auditorium);
@@ -370,11 +363,11 @@ public class AuditoriumControllerTest : IDisposable
 
         // Assert
         Assert.IsType<NoContentResult>(result);
-        
+
         var updatedAuditorium = await _fakeContext.Auditoriums
             .Include(a => a.SeatingPlan)
             .FirstOrDefaultAsync(a => a.Id == 1);
-        
+
         Assert.NotNull(updatedAuditorium);
         Assert.NotNull(updatedAuditorium.SeatingPlan);
         Assert.Equal(2, updatedAuditorium.SeatingPlan.Id);
@@ -413,8 +406,7 @@ public class AuditoriumControllerTest : IDisposable
             Id = 1,
             PlanName = "Standard Plan",
             LayoutJson = "{}",
-            Description = "A standard seating plan.",
-            AuditoriumId = 1
+            Description = "A standard seating plan."
         };
 
         _fakeContext.SeatingPlans.Add(seatingPlan);
@@ -424,7 +416,7 @@ public class AuditoriumControllerTest : IDisposable
         {
             Id = 1,
             AuditoriumName = "Main Auditorium",
-            SeatingPlan = seatingPlan
+            SeatingPlanId = seatingPlan.Id
         };
 
         _fakeContext.Auditoriums.Add(auditorium);
@@ -441,7 +433,6 @@ public class AuditoriumControllerTest : IDisposable
 
     public void Dispose()
     {
-        // Dispose context
         _fakeContext.Dispose();
     }
 }

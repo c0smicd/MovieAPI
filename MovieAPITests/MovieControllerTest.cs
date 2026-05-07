@@ -135,8 +135,7 @@ public class MovieControllerTest : IDisposable
             Id = 1,
             PlanName = "Standard Plan",
             LayoutJson = "{}",
-            Description = "A standard seating plan.",
-            AuditoriumId = 1
+            Description = "A standard seating plan."
         };
 
         var seatingPlan2 = new SeatingPlan
@@ -144,8 +143,7 @@ public class MovieControllerTest : IDisposable
             Id = 2,
             PlanName = "Premium Plan",
             LayoutJson = "{}",
-            Description = "A premium seating plan.",
-            AuditoriumId = 2
+            Description = "A premium seating plan."
         };
 
         _fakeContext.SeatingPlans.AddRange(seatingPlan1, seatingPlan2);
@@ -155,14 +153,14 @@ public class MovieControllerTest : IDisposable
         {
             Id = 1,
             AuditoriumName = "Main Auditorium",
-            SeatingPlan = seatingPlan1
+            SeatingPlanId = seatingPlan1.Id
         };
 
         var auditorium2 = new Auditorium
         {
             Id = 2,
             AuditoriumName = "VIP Auditorium",
-            SeatingPlan = seatingPlan2
+            SeatingPlanId = seatingPlan2.Id
         };
 
         _fakeContext.Auditoriums.AddRange(auditorium1, auditorium2);

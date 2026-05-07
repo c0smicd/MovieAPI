@@ -59,7 +59,12 @@ public class AuditoriumController(AppDbContext context,
                 })
                 .FirstOrDefaultAsync();
 
-            // Store in cache
+            if (auditorium == null)
+            {
+                Logger.LogWarning("Auditorium {Id} not found.", id);
+                return NotFound();
+            }
+
             Cache.Set(CacheKeys.AuditoriumById(id), auditorium, TimeSpan.FromMinutes(10));
             Logger.LogInformation("Auditorium {Id} retrieved from database and cached.", id);
 
@@ -112,7 +117,7 @@ public class AuditoriumController(AppDbContext context,
             {
                 Id = auditoriumDto.Id,
                 AuditoriumName = auditoriumDto.AuditoriumName,
-                SeatingPlan = seatingPlan
+                SeatingPlanId = seatingPlan.Id
             };
 
             Context.Auditoriums.Add(auditorium);
@@ -318,7 +323,7 @@ public class AuditoriumController(AppDbContext context,
                 return BadRequest($"Seating plan with ID {request.SeatingPlanId} not found.");
             }
 
-            auditorium.SeatingPlan = seatingPlan;
+            auditorium.SeatingPlanId = seatingPlan.Id;
 
             await Context.SaveChangesAsync();
 
